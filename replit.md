@@ -1,58 +1,71 @@
 # Ha-Ha.ai Landing Page
 
 ## Overview
+A stunning single-page bilingual landing page for Ha-Ha.ai, a Quebec-based humorous AI voice assistant featuring Cathy Gauthier as the first voice personality.
 
-Ha-Ha.ai is a single-page bilingual landing page for a Quebec-based humorous AI voice assistant. The application showcases the product concept, collects waitlist signups, and supports both French (default) and English languages. The site features a dark theme with animated backgrounds and modern UI components.
+## Tech Stack
+- **Frontend**: React + TypeScript + Tailwind CSS
+- **Backend**: Express.js with in-memory storage
+- **Build**: Vite
+- **Forms**: React Hook Form + Zod validation
+- **State**: TanStack Query
 
-## User Preferences
+## Project Structure
+```
+client/
+├── src/
+│   ├── components/        # Reusable UI components
+│   │   ├── ui/           # Shadcn components
+│   │   ├── AnimatedBackground.tsx
+│   │   ├── Header.tsx
+│   │   ├── HeroSection.tsx
+│   │   ├── FeaturesSection.tsx
+│   │   ├── PersonalitySection.tsx
+│   │   ├── ExamplesSection.tsx
+│   │   ├── WhyItWorksSection.tsx
+│   │   ├── WaitlistSection.tsx
+│   │   └── Footer.tsx
+│   ├── lib/
+│   │   ├── i18n.ts       # Translations (FR/EN)
+│   │   └── queryClient.ts
+│   ├── pages/
+│   │   └── LandingPage.tsx
+│   └── index.css         # Dark theme design tokens
+server/
+├── routes.ts             # API endpoints
+├── storage.ts            # In-memory storage
+└── index.ts              # Express server
+shared/
+└── schema.ts             # Zod schemas & types
+```
 
-Preferred communication style: Simple, everyday language.
+## Key Features
+1. **Bilingual Support**: French (default) and English via header toggle
+2. **Dark Theme**: Black background with red/blue accent colors
+3. **Animated Background**: Particle system with connecting lines
+4. **Email Waitlist**: Form submission with backend storage
+5. **Responsive Design**: Mobile-first, fully responsive
 
-## System Architecture
+## API Endpoints
+- `POST /api/waitlist` - Submit email to waitlist
+- `GET /api/waitlist/count` - Get current waitlist count
 
-### Frontend Architecture
-- **Framework**: React 18 with TypeScript
-- **Routing**: Wouter (lightweight React router)
-- **Styling**: Tailwind CSS with custom CSS variables for theming
-- **UI Components**: shadcn/ui component library (Radix UI primitives)
-- **State Management**: React Query for server state, React useState for local state
-- **Form Handling**: React Hook Form with Zod validation
-- **Build Tool**: Vite with custom plugins for Replit integration
+## Color Scheme
+- Background: Near black (#0a0a0a)
+- Primary: Red (hsl 0 72% 51%)
+- Secondary: Blue (hsl 220 70% 50%)
+- Muted foreground for secondary text
 
-### Backend Architecture
-- **Framework**: Express.js 5 running on Node.js
-- **API Pattern**: RESTful endpoints under `/api/*`
-- **Development**: Vite dev server with HMR proxied through Express
-- **Production**: Static file serving from built assets
+## Running the Project
+```bash
+npm run dev
+```
+Server starts on port 5000, serving both API and frontend.
 
-### Data Storage
-- **ORM**: Drizzle ORM with PostgreSQL dialect
-- **Schema Location**: `shared/schema.ts` (shared between client and server)
-- **Current Storage**: In-memory storage (`MemStorage` class) with interface for easy database swap
-- **Database Ready**: Schema defined for PostgreSQL with `drizzle-kit push` command available
-
-### Key Design Decisions
-
-**Internationalization**: Simple object-based i18n system in `client/src/lib/i18n.ts` without external libraries. All text comes from translation objects, with French as default.
-
-**Shared Schema**: Zod schemas defined in `shared/schema.ts` are used for both database models and API validation, ensuring type safety across the full stack.
-
-**Component Structure**: Feature sections are modular components (HeroSection, FeaturesSection, etc.) that receive language prop for translations.
-
-**API Design**: Two endpoints exist - POST `/api/waitlist` for signups and GET `/api/waitlist/count` for statistics.
-
-## External Dependencies
-
-### Third-Party Services
-- **PostgreSQL**: Database (configured via `DATABASE_URL` environment variable)
-- **Google Fonts**: Inter font family loaded via CDN
-
-### Key NPM Packages
-- **@tanstack/react-query**: Server state management and caching
-- **drizzle-orm / drizzle-zod**: Database ORM and schema-to-Zod conversion
-- **react-hook-form / @hookform/resolvers**: Form state management with Zod integration
-- **Radix UI primitives**: Accessible UI component foundations
-- **class-variance-authority / clsx / tailwind-merge**: Utility-first CSS composition
-
-### Environment Variables Required
-- `DATABASE_URL`: PostgreSQL connection string (required for database operations)
+## Recent Changes
+- January 2026: Initial landing page implementation
+  - Dark theme with animated particle background
+  - Bilingual i18n system (FR/EN)
+  - All landing page sections complete
+  - Email waitlist with form validation
+  - E2E tested and verified
