@@ -1,6 +1,6 @@
 import { type Language, copy } from '@/lib/i18n';
 import { Button } from '@/components/ui/button';
-import { ArrowRight, Sparkles } from 'lucide-react';
+import { ArrowRight } from 'lucide-react';
 import fleurDeLisImage from '@assets/image_1769047259460.png';
 
 interface HeroSectionProps {
@@ -40,13 +40,6 @@ export function HeroSection({ language }: HeroSectionProps) {
       </div>
 
       <div className="relative z-10 max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-        <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-card border border-border mb-8">
-          <Sparkles className="w-4 h-4 text-primary" />
-          <span className="text-sm text-muted-foreground">
-            {language === 'fr' ? 'Nouveau' : 'New'}
-          </span>
-        </div>
-
         <h1 className="text-5xl sm:text-6xl md:text-7xl font-bold mb-4 tracking-tight">
           <span className="bg-gradient-to-r from-primary via-secondary to-primary bg-clip-text text-transparent animate-gradient">
             {t.headline}
