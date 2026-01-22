@@ -1,5 +1,6 @@
 import { type Language, copy } from '@/lib/i18n';
 import { Button } from '@/components/ui/button';
+import logoImage from '@assets/image_1769047272252.png';
 
 interface HeaderProps {
   language: Language;
@@ -21,7 +22,12 @@ export function Header({ language, onLanguageChange }: HeaderProps) {
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16 gap-4">
           <div className="flex items-center gap-2">
-            <span className="text-xl font-bold text-gradient bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">
+            <img 
+              src={logoImage} 
+              alt="Ha-Ha.ai" 
+              className="h-10 w-10 rounded-md object-cover"
+            />
+            <span className="text-xl font-bold bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">
               {t.nav.logo}
             </span>
           </div>

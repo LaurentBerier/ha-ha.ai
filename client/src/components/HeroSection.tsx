@@ -1,6 +1,7 @@
 import { type Language, copy } from '@/lib/i18n';
 import { Button } from '@/components/ui/button';
 import { ArrowRight, Sparkles } from 'lucide-react';
+import fleurDeLisImage from '@assets/image_1769047259460.png';
 
 interface HeroSectionProps {
   language: Language;
@@ -24,10 +25,18 @@ export function HeroSection({ language }: HeroSectionProps) {
   };
 
   return (
-    <section className="relative min-h-screen flex items-center justify-center pt-16">
+    <section className="relative min-h-screen flex items-center justify-center pt-16 overflow-hidden">
       <div className="absolute inset-0 overflow-hidden">
         <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-primary/20 rounded-full blur-3xl animate-pulse-glow" />
         <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-secondary/20 rounded-full blur-3xl animate-pulse-glow" style={{ animationDelay: '2s' }} />
+      </div>
+
+      <div className="absolute right-0 top-1/2 -translate-y-1/2 opacity-20 pointer-events-none hidden lg:block">
+        <img 
+          src={fleurDeLisImage} 
+          alt="" 
+          className="w-[500px] h-auto"
+        />
       </div>
 
       <div className="relative z-10 max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">

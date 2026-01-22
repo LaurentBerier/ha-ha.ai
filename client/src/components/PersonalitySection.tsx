@@ -1,6 +1,7 @@
 import { type Language, copy } from '@/lib/i18n';
 import { Badge } from '@/components/ui/badge';
 import { Quote } from 'lucide-react';
+import cathyImage from '@assets/image_1769047292790.png';
 
 interface PersonalitySectionProps {
   language: Language;
@@ -16,15 +17,17 @@ export function PersonalitySection({ language }: PersonalitySectionProps) {
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 relative">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
           <div className="relative">
-            <div className="aspect-square max-w-md mx-auto lg:mx-0 relative">
+            <div className="aspect-[3/4] max-w-md mx-auto lg:mx-0 relative">
               <div className="absolute inset-0 bg-gradient-to-br from-primary/30 to-secondary/30 rounded-2xl blur-2xl" />
-              <div className="relative bg-card rounded-2xl border border-border overflow-hidden h-full flex items-center justify-center">
-                <div className="text-center p-8">
-                  <div className="w-32 h-32 mx-auto mb-6 rounded-full bg-gradient-to-br from-primary/40 to-secondary/40 flex items-center justify-center">
-                    <span className="text-5xl font-bold text-foreground">CG</span>
-                  </div>
-                  <h3 className="text-2xl font-bold mb-2">{t.title}</h3>
-                  <p className="text-muted-foreground">{t.subtitle}</p>
+              <div className="relative bg-card rounded-2xl border border-border overflow-hidden h-full">
+                <img 
+                  src={cathyImage} 
+                  alt="Cathy Gauthier" 
+                  className="w-full h-full object-cover object-top"
+                />
+                <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/80 to-transparent p-6">
+                  <h3 className="text-2xl font-bold text-white mb-1">{t.title}</h3>
+                  <p className="text-white/80">{t.subtitle}</p>
                 </div>
               </div>
             </div>

@@ -10,6 +10,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { insertWaitlistSchema } from '@shared/schema';
 import { z } from 'zod';
 import { ArrowRight, CheckCircle, Loader2 } from 'lucide-react';
+import stageImage from '@assets/image_1769047346055.png';
 
 interface WaitlistSectionProps {
   language: Language;
@@ -49,10 +50,16 @@ export function WaitlistSection({ language }: WaitlistSectionProps) {
   };
 
   return (
-    <section id="waitlist" className="py-24 relative">
-      <div className="absolute inset-0 overflow-hidden">
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-gradient-to-br from-primary/20 to-secondary/20 rounded-full blur-3xl" />
-      </div>
+    <section id="waitlist" className="py-24 relative overflow-hidden">
+      <div 
+        className="absolute inset-0 opacity-20"
+        style={{
+          backgroundImage: `url(${stageImage})`,
+          backgroundSize: 'cover',
+          backgroundPosition: 'center',
+        }}
+      />
+      <div className="absolute inset-0 bg-gradient-to-t from-background via-background/90 to-background" />
 
       <div className="max-w-2xl mx-auto px-4 sm:px-6 lg:px-8 relative">
         <div className="text-center mb-10">
