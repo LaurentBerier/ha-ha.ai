@@ -86,10 +86,10 @@ export function HeroSection({ language }: HeroSectionProps) {
                 <img 
                   src={phoneImage} 
                   alt="Ha-Ha.ai App" 
-                  className="relative w-52 sm:w-64 md:w-72 h-auto z-10"
+                  className="relative w-64 sm:w-80 md:w-96 h-auto z-10"
                   data-testid="img-phone-mockup"
                 />
-                <div className="absolute inset-0 flex items-center justify-center z-20" style={{ top: '10%', bottom: '15%' }}>
+                <div className="absolute inset-0 flex items-center justify-center z-20" style={{ top: '12%', bottom: '18%', left: '8%', right: '8%' }}>
                   <InteractiveCloud />
                 </div>
               </div>
