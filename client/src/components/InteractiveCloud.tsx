@@ -31,16 +31,16 @@ export function InteractiveCloud() {
 
   const initParticles = useCallback((width: number, height: number) => {
     const colors = [
-      'hsl(0, 72%, 51%)',
-      'hsl(220, 70%, 50%)',
-      'hsl(280, 70%, 50%)',
-      'hsl(340, 70%, 50%)',
+      'hsl(220, 70%, 55%)',
+      'hsl(210, 80%, 60%)',
+      'hsl(200, 75%, 50%)',
+      'hsl(0, 0%, 100%)',
     ];
 
     const particles: Particle[] = [];
     const centerX = width / 2;
     const centerY = height / 2;
-    const cloudRadius = Math.min(width, height) * 0.35;
+    const cloudRadius = Math.min(width, height) * 0.28;
 
     for (let i = 0; i < 60; i++) {
       const angle = (Math.PI * 2 * i) / 60;
@@ -134,10 +134,10 @@ export function InteractiveCloud() {
 
       const gradient = ctx.createRadialGradient(
         centerX, centerY, 0,
-        centerX, centerY, width * 0.45
+        centerX, centerY, width * 0.35
       );
-      gradient.addColorStop(0, 'rgba(220, 38, 38, 0.15)');
-      gradient.addColorStop(0.5, 'rgba(59, 130, 246, 0.1)');
+      gradient.addColorStop(0, 'rgba(59, 130, 246, 0.2)');
+      gradient.addColorStop(0.5, 'rgba(96, 165, 250, 0.1)');
       gradient.addColorStop(1, 'rgba(0, 0, 0, 0)');
       ctx.fillStyle = gradient;
       ctx.beginPath();
@@ -160,8 +160,8 @@ export function InteractiveCloud() {
           wave.x, wave.y, wave.radius * 0.8,
           wave.x, wave.y, wave.radius
         );
-        innerGradient.addColorStop(0, 'rgba(220, 38, 38, 0)');
-        innerGradient.addColorStop(1, `rgba(59, 130, 246, ${wave.opacity * 0.3})`);
+        innerGradient.addColorStop(0, 'rgba(59, 130, 246, 0)');
+        innerGradient.addColorStop(1, `rgba(147, 197, 253, ${wave.opacity * 0.3})`);
         ctx.fillStyle = innerGradient;
         ctx.beginPath();
         ctx.arc(wave.x, wave.y, wave.radius, 0, Math.PI * 2);

@@ -82,7 +82,7 @@ export function HeroSection({ language }: HeroSectionProps) {
 
           <div className="order-1 lg:order-2 relative">
             <div className="relative flex items-center justify-center">
-              <div className="relative w-full max-w-[320px] sm:max-w-[380px] md:max-w-[420px] mx-auto">
+              <div className="relative w-full max-w-[340px] sm:max-w-[420px] md:max-w-[480px] mx-auto">
                 <img 
                   src={phoneImage} 
                   alt="Ha-Ha.ai App" 
