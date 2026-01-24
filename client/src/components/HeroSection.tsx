@@ -2,7 +2,7 @@ import { type Language, copy } from '@/lib/i18n';
 import { Button } from '@/components/ui/button';
 import { ArrowRight } from 'lucide-react';
 import { InteractiveCloud } from './InteractiveCloud';
-import phoneImage from '@assets/image_1769047319135.png';
+import phoneImage from '@assets/Cellphone_Trans_1769281442558.png';
 
 interface HeroSectionProps {
   language: Language;
@@ -82,17 +82,15 @@ export function HeroSection({ language }: HeroSectionProps) {
 
           <div className="order-1 lg:order-2 relative">
             <div className="relative flex items-center justify-center">
-              <InteractiveCloud />
-              
-              <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 z-20">
-                <div className="relative">
-                  <div className="absolute -inset-4 bg-gradient-to-br from-primary/30 to-secondary/30 rounded-3xl blur-xl" />
-                  <img 
-                    src={phoneImage} 
-                    alt="Ha-Ha.ai App" 
-                    className="relative w-40 sm:w-48 md:w-56 h-auto drop-shadow-2xl"
-                    data-testid="img-phone-mockup"
-                  />
+              <div className="relative">
+                <img 
+                  src={phoneImage} 
+                  alt="Ha-Ha.ai App" 
+                  className="relative w-52 sm:w-64 md:w-72 h-auto z-10"
+                  data-testid="img-phone-mockup"
+                />
+                <div className="absolute inset-0 flex items-center justify-center z-20" style={{ top: '10%', bottom: '15%' }}>
+                  <InteractiveCloud />
                 </div>
               </div>
 

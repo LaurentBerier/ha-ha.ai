@@ -1,24 +1,58 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useCallback } from 'react';
 
 interface Particle {
-  x: number;
-  y: number;
-  baseX: number;
-  baseY: number;
-  vx: number;
-  vy: number;
+  baseAngle: number;
+  basePhi: number;
   radius: number;
   color: string;
-  originalColor: string;
 }
 
 export function InteractiveCloud() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
-  const mouseRef = useRef({ x: 0, y: 0, isOver: false });
+  const isHoveringRef = useRef(false);
   const particlesRef = useRef<Particle[]>([]);
   const animationRef = useRef<number>(0);
-  const timeRef = useRef(0);
-  const [dimensions, setDimensions] = useState({ width: 400, height: 400 });
+  const rotationYRef = useRef(0);
+  const rotationSpeedRef = useRef(0.008);
+
+  const initParticles = useCallback(() => {
+    const colors = [
+      'hsl(0, 72%, 51%)',
+      'hsl(220, 70%, 50%)',
+      'hsl(280, 70%, 50%)',
+      'hsl(340, 70%, 50%)',
+    ];
+
+    const particles: Particle[] = [];
+    const particleCount = 80;
+
+    for (let i = 0; i < particleCount; i++) {
+      const phi = Math.acos(-1 + (2 * i) / particleCount);
+      const theta = Math.sqrt(particleCount * Math.PI) * phi;
+      
+      particles.push({
+        baseAngle: theta,
+        basePhi: phi,
+        radius: 2 + Math.random() * 3,
+        color: colors[Math.floor(Math.random() * colors.length)],
+      });
+    }
+
+    for (let i = 0; i < 30; i++) {
+      particles.push({
+        baseAngle: Math.random() * Math.PI * 2,
+        basePhi: Math.random() * Math.PI,
+        radius: 3 + Math.random() * 4,
+        color: colors[Math.floor(Math.random() * colors.length)],
+      });
+    }
+
+    particlesRef.current = particles;
+  }, []);
+
+  useEffect(() => {
+    initParticles();
+  }, [initParticles]);
 
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -27,156 +61,117 @@ export function InteractiveCloud() {
     const ctx = canvas.getContext('2d');
     if (!ctx) return;
 
-    const updateDimensions = () => {
-      const container = canvas.parentElement;
-      if (container) {
-        const size = Math.min(container.clientWidth, 500);
-        setDimensions({ width: size, height: size });
-      }
-    };
-
-    updateDimensions();
-    window.addEventListener('resize', updateDimensions);
-
-    const colors = {
-      primary: 'hsl(0, 72%, 51%)',
-      secondary: 'hsl(220, 70%, 50%)',
-      accent1: 'hsl(280, 70%, 50%)',
-      accent2: 'hsl(340, 70%, 50%)',
-    };
-
-    const colorArray = [colors.primary, colors.secondary, colors.accent1, colors.accent2];
-
-    const initParticles = () => {
-      const particles: Particle[] = [];
-      const centerX = dimensions.width / 2;
-      const centerY = dimensions.height / 2;
-      const particleCount = 120;
-
-      for (let i = 0; i < particleCount; i++) {
-        const angle = (Math.PI * 2 * i) / particleCount + Math.random() * 0.5;
-        const radius = 80 + Math.random() * 60;
-        const x = centerX + Math.cos(angle) * radius;
-        const y = centerY + Math.sin(angle) * radius;
-        const color = colorArray[Math.floor(Math.random() * colorArray.length)];
-
-        particles.push({
-          x,
-          y,
-          baseX: x,
-          baseY: y,
-          vx: 0,
-          vy: 0,
-          radius: 2 + Math.random() * 4,
-          color,
-          originalColor: color,
-        });
-      }
-
-      for (let i = 0; i < 40; i++) {
-        const angle = Math.random() * Math.PI * 2;
-        const radius = Math.random() * 50;
-        const x = centerX + Math.cos(angle) * radius;
-        const y = centerY + Math.sin(angle) * radius;
-        const color = colorArray[Math.floor(Math.random() * colorArray.length)];
-
-        particles.push({
-          x,
-          y,
-          baseX: x,
-          baseY: y,
-          vx: 0,
-          vy: 0,
-          radius: 3 + Math.random() * 5,
-          color,
-          originalColor: color,
-        });
-      }
-
-      particlesRef.current = particles;
-    };
-
-    initParticles();
+    let timeOffset = 0;
 
     const animate = () => {
-      timeRef.current += 0.02;
-      ctx.clearRect(0, 0, dimensions.width, dimensions.height);
+      const width = canvas.width;
+      const height = canvas.height;
+      
+      if (width === 0 || height === 0) {
+        animationRef.current = requestAnimationFrame(animate);
+        return;
+      }
 
-      const centerX = dimensions.width / 2;
-      const centerY = dimensions.height / 2;
+      timeOffset += 0.015;
+      
+      const targetSpeed = isHoveringRef.current ? 0.04 : 0.008;
+      rotationSpeedRef.current += (targetSpeed - rotationSpeedRef.current) * 0.1;
+      rotationYRef.current += rotationSpeedRef.current;
+
+      ctx.clearRect(0, 0, width, height);
+
+      const centerX = width / 2;
+      const centerY = height / 2;
+      const sphereRadius = Math.min(width, height) * 0.32;
+
       const gradient = ctx.createRadialGradient(
         centerX, centerY, 0,
-        centerX, centerY, 180
+        centerX, centerY, sphereRadius * 1.5
       );
-      gradient.addColorStop(0, 'rgba(220, 38, 38, 0.15)');
-      gradient.addColorStop(0.5, 'rgba(59, 130, 246, 0.1)');
+      gradient.addColorStop(0, 'rgba(220, 38, 38, 0.2)');
+      gradient.addColorStop(0.5, 'rgba(59, 130, 246, 0.15)');
       gradient.addColorStop(1, 'rgba(0, 0, 0, 0)');
       ctx.fillStyle = gradient;
       ctx.beginPath();
-      ctx.arc(centerX, centerY, 180, 0, Math.PI * 2);
+      ctx.arc(centerX, centerY, sphereRadius * 1.5, 0, Math.PI * 2);
       ctx.fill();
 
-      particlesRef.current.forEach((particle, index) => {
-        const floatX = Math.sin(timeRef.current + index * 0.1) * 8;
-        const floatY = Math.cos(timeRef.current * 0.8 + index * 0.1) * 8;
+      const rotX = Math.sin(timeOffset * 0.5) * 0.3;
 
-        let targetX = particle.baseX + floatX;
-        let targetY = particle.baseY + floatY;
+      const transformedParticles = particlesRef.current.map((particle, index) => {
+        const theta = particle.baseAngle + rotationYRef.current;
+        const phi = particle.basePhi;
 
-        if (mouseRef.current.isOver) {
-          const dx = particle.x - mouseRef.current.x;
-          const dy = particle.y - mouseRef.current.y;
-          const distance = Math.sqrt(dx * dx + dy * dy);
-          const maxDistance = 120;
+        const x3d = sphereRadius * Math.sin(phi) * Math.cos(theta);
+        const y3d = sphereRadius * Math.cos(phi);
+        const z3d = sphereRadius * Math.sin(phi) * Math.sin(theta);
 
-          if (distance < maxDistance && distance > 1) {
-            const force = (1 - distance / maxDistance) * 40;
-            targetX += (dx / distance) * force;
-            targetY += (dy / distance) * force;
-          }
-        }
+        const y3dRotated = y3d * Math.cos(rotX) - z3d * Math.sin(rotX);
+        const z3dRotated = y3d * Math.sin(rotX) + z3d * Math.cos(rotX);
 
-        particle.vx += (targetX - particle.x) * 0.08;
-        particle.vy += (targetY - particle.y) * 0.08;
-        particle.vx *= 0.9;
-        particle.vy *= 0.9;
-        particle.x += particle.vx;
-        particle.y += particle.vy;
+        return {
+          x: centerX + x3d,
+          y: centerY + y3dRotated,
+          z: z3dRotated,
+          radius: particle.radius,
+          color: particle.color,
+          index,
+          baseAngle: particle.baseAngle,
+        };
+      }).sort((a, b) => a.z - b.z);
 
-        const pulseScale = 1 + Math.sin(timeRef.current * 2 + index * 0.2) * 0.3;
-        const drawRadius = particle.radius * pulseScale;
+      transformedParticles.forEach((p) => {
+        const depth = (p.z + sphereRadius) / (sphereRadius * 2);
+        const scale = 0.5 + depth * 0.5;
+        const opacity = 0.3 + depth * 0.7;
+        
+        const pulseScale = 1 + Math.sin(timeOffset * 2 + p.baseAngle) * 0.2;
+        const drawRadius = p.radius * scale * pulseScale;
+        const gradientRadius = drawRadius * 2.5;
+
+        if (gradientRadius <= 0) return;
 
         const particleGradient = ctx.createRadialGradient(
-          particle.x, particle.y, 0,
-          particle.x, particle.y, drawRadius * 2
+          p.x, p.y, 0,
+          p.x, p.y, gradientRadius
         );
-        particleGradient.addColorStop(0, particle.color);
-        particleGradient.addColorStop(1, 'rgba(0, 0, 0, 0)');
+        
+        const colorMatch = p.color.match(/hsl\((\d+),\s*(\d+)%,\s*(\d+)%\)/);
+        if (colorMatch) {
+          const [, h, s, l] = colorMatch;
+          particleGradient.addColorStop(0, `hsla(${h}, ${s}%, ${l}%, ${opacity})`);
+          particleGradient.addColorStop(1, 'rgba(0, 0, 0, 0)');
+        } else {
+          particleGradient.addColorStop(0, p.color);
+          particleGradient.addColorStop(1, 'rgba(0, 0, 0, 0)');
+        }
 
         ctx.beginPath();
-        ctx.arc(particle.x, particle.y, drawRadius * 2, 0, Math.PI * 2);
+        ctx.arc(p.x, p.y, gradientRadius, 0, Math.PI * 2);
         ctx.fillStyle = particleGradient;
         ctx.fill();
       });
 
       ctx.globalCompositeOperation = 'lighter';
-      particlesRef.current.forEach((particle, i) => {
-        particlesRef.current.slice(i + 1).forEach((other) => {
-          const dx = particle.x - other.x;
-          const dy = particle.y - other.y;
+      for (let i = 0; i < transformedParticles.length; i++) {
+        const p = transformedParticles[i];
+        for (let j = i + 1; j < Math.min(i + 6, transformedParticles.length); j++) {
+          const other = transformedParticles[j];
+          const dx = p.x - other.x;
+          const dy = p.y - other.y;
           const distance = Math.sqrt(dx * dx + dy * dy);
 
-          if (distance < 50) {
-            const opacity = (1 - distance / 50) * 0.3;
+          if (distance < 40 && distance > 0) {
+            const lineOpacity = (1 - distance / 40) * 0.25;
             ctx.beginPath();
-            ctx.moveTo(particle.x, particle.y);
+            ctx.moveTo(p.x, p.y);
             ctx.lineTo(other.x, other.y);
-            ctx.strokeStyle = `rgba(255, 255, 255, ${opacity})`;
+            ctx.strokeStyle = `rgba(255, 255, 255, ${lineOpacity})`;
             ctx.lineWidth = 0.5;
             ctx.stroke();
           }
-        });
-      });
+        }
+      }
       ctx.globalCompositeOperation = 'source-over';
 
       animationRef.current = requestAnimationFrame(animate);
@@ -186,51 +181,20 @@ export function InteractiveCloud() {
 
     return () => {
       cancelAnimationFrame(animationRef.current);
-      window.removeEventListener('resize', updateDimensions);
     };
-  }, [dimensions.width, dimensions.height]);
-
-  const handleMouseMove = (e: React.MouseEvent<HTMLCanvasElement>) => {
-    const canvas = canvasRef.current;
-    if (!canvas) return;
-
-    const rect = canvas.getBoundingClientRect();
-    mouseRef.current = {
-      x: e.clientX - rect.left,
-      y: e.clientY - rect.top,
-      isOver: true,
-    };
-  };
-
-  const handleMouseLeave = () => {
-    mouseRef.current.isOver = false;
-  };
-
-  const handleTouchMove = (e: React.TouchEvent<HTMLCanvasElement>) => {
-    const canvas = canvasRef.current;
-    if (!canvas) return;
-
-    const rect = canvas.getBoundingClientRect();
-    const touch = e.touches[0];
-    mouseRef.current = {
-      x: touch.clientX - rect.left,
-      y: touch.clientY - rect.top,
-      isOver: true,
-    };
-  };
+  }, []);
 
   return (
-    <div className="relative w-full max-w-[500px] aspect-square mx-auto">
-      <div className="absolute inset-0 bg-gradient-to-br from-primary/10 via-secondary/10 to-primary/10 rounded-full blur-3xl animate-pulse" />
+    <div className="relative w-full h-full flex items-center justify-center">
       <canvas
         ref={canvasRef}
-        width={dimensions.width}
-        height={dimensions.height}
-        onMouseMove={handleMouseMove}
-        onMouseLeave={handleMouseLeave}
-        onTouchMove={handleTouchMove}
-        onTouchEnd={handleMouseLeave}
-        className="relative z-10 cursor-pointer touch-none"
+        width={240}
+        height={240}
+        onMouseEnter={() => { isHoveringRef.current = true; }}
+        onMouseLeave={() => { isHoveringRef.current = false; }}
+        onTouchStart={() => { isHoveringRef.current = true; }}
+        onTouchEnd={() => { isHoveringRef.current = false; }}
+        className="cursor-pointer touch-none"
         data-testid="canvas-interactive-cloud"
       />
     </div>
