@@ -82,14 +82,14 @@ export function HeroSection({ language }: HeroSectionProps) {
 
           <div className="order-1 lg:order-2 relative">
             <div className="relative flex items-center justify-center">
-              <div className="relative">
+              <div className="relative w-full max-w-[320px] sm:max-w-[380px] md:max-w-[420px] mx-auto">
                 <img 
                   src={phoneImage} 
                   alt="Ha-Ha.ai App" 
-                  className="relative w-64 sm:w-80 md:w-96 h-auto z-10"
+                  className="relative w-full h-auto z-10"
                   data-testid="img-phone-mockup"
                 />
-                <div className="absolute inset-0 flex items-center justify-center z-20" style={{ top: '12%', bottom: '18%', left: '8%', right: '8%' }}>
+                <div className="absolute inset-0 flex items-center justify-center z-20" style={{ top: '10%', bottom: '16%', left: '6%', right: '6%' }}>
                   <InteractiveCloud />
                 </div>
               </div>

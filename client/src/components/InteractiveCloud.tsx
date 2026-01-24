@@ -1,4 +1,4 @@
-import { useEffect, useRef, useCallback } from 'react';
+import { useEffect, useRef, useCallback, useState } from 'react';
 
 interface Particle {
   baseX: number;
@@ -22,10 +22,12 @@ interface Shockwave {
 
 export function InteractiveCloud() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
+  const containerRef = useRef<HTMLDivElement>(null);
   const particlesRef = useRef<Particle[]>([]);
   const shockwavesRef = useRef<Shockwave[]>([]);
   const animationRef = useRef<number>(0);
   const timeRef = useRef(0);
+  const [size, setSize] = useState({ width: 300, height: 300 });
 
   const initParticles = useCallback((width: number, height: number) => {
     const colors = [
@@ -92,14 +94,35 @@ export function InteractiveCloud() {
   }, []);
 
   useEffect(() => {
+    const container = containerRef.current;
+    if (!container) return;
+
+    const updateSize = () => {
+      const rect = container.getBoundingClientRect();
+      const newSize = Math.floor(Math.min(rect.width, rect.height));
+      if (newSize > 0) {
+        setSize({ width: newSize, height: newSize });
+      }
+    };
+
+    updateSize();
+    const resizeObserver = new ResizeObserver(updateSize);
+    resizeObserver.observe(container);
+
+    return () => resizeObserver.disconnect();
+  }, []);
+
+  useEffect(() => {
     const canvas = canvasRef.current;
     if (!canvas) return;
 
     const ctx = canvas.getContext('2d');
     if (!ctx) return;
 
-    const width = canvas.width;
-    const height = canvas.height;
+    const width = size.width;
+    const height = size.height;
+    if (width === 0 || height === 0) return;
+
     const centerX = width / 2;
     const centerY = height / 2;
 
@@ -237,7 +260,7 @@ export function InteractiveCloud() {
     return () => {
       cancelAnimationFrame(animationRef.current);
     };
-  }, [initParticles]);
+  }, [size, initParticles]);
 
   const handleInteraction = (e: React.MouseEvent<HTMLCanvasElement> | React.TouchEvent<HTMLCanvasElement>) => {
     const canvas = canvasRef.current;
@@ -258,14 +281,15 @@ export function InteractiveCloud() {
   };
 
   return (
-    <div className="relative w-full h-full flex items-center justify-center">
+    <div ref={containerRef} className="relative w-full h-full flex items-center justify-center">
       <canvas
         ref={canvasRef}
-        width={300}
-        height={300}
+        width={size.width}
+        height={size.height}
         onClick={handleInteraction}
         onTouchStart={handleInteraction}
-        className="cursor-pointer touch-none w-full h-full"
+        className="cursor-pointer touch-none"
+        style={{ width: size.width, height: size.height }}
         data-testid="canvas-interactive-cloud"
       />
     </div>
