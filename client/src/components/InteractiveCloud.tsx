@@ -20,6 +20,8 @@ interface Shockwave {
   opacity: number;
 }
 
+const isMobile = () => typeof window !== 'undefined' && window.innerWidth < 768;
+
 export function InteractiveCloud() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
@@ -27,14 +29,16 @@ export function InteractiveCloud() {
   const shockwavesRef = useRef<Shockwave[]>([]);
   const animationRef = useRef<number>(0);
   const timeRef = useRef(0);
+  const lastFrameRef = useRef(0);
   const [size, setSize] = useState({ width: 300, height: 300 });
+  const [mobile, setMobile] = useState(false);
 
-  const initParticles = useCallback((width: number, height: number) => {
+  const initParticles = useCallback((width: number, height: number, isMobileDevice: boolean) => {
     const colors = [
-      'hsl(220, 70%, 55%)',
-      'hsl(210, 80%, 60%)',
-      'hsl(200, 75%, 50%)',
-      'hsl(0, 0%, 100%)',
+      'rgba(96, 165, 250, 0.8)',
+      'rgba(59, 130, 246, 0.8)',
+      'rgba(37, 99, 235, 0.8)',
+      'rgba(255, 255, 255, 0.9)',
     ];
 
     const particles: Particle[] = [];
@@ -42,8 +46,11 @@ export function InteractiveCloud() {
     const centerY = height / 2;
     const cloudRadius = Math.min(width, height) * 0.28;
 
-    for (let i = 0; i < 60; i++) {
-      const angle = (Math.PI * 2 * i) / 60;
+    const outerCount = isMobileDevice ? 25 : 60;
+    const innerCount = isMobileDevice ? 15 : 40;
+
+    for (let i = 0; i < outerCount; i++) {
+      const angle = (Math.PI * 2 * i) / outerCount;
       const r = cloudRadius * (0.6 + Math.random() * 0.4);
       const x = centerX + Math.cos(angle) * r;
       const y = centerY + Math.sin(angle) * r;
@@ -55,13 +62,13 @@ export function InteractiveCloud() {
         y,
         vx: 0,
         vy: 0,
-        radius: 2 + Math.random() * 3,
+        radius: isMobileDevice ? 3 + Math.random() * 2 : 2 + Math.random() * 3,
         color: colors[Math.floor(Math.random() * colors.length)],
         phase: Math.random() * Math.PI * 2,
       });
     }
 
-    for (let i = 0; i < 40; i++) {
+    for (let i = 0; i < innerCount; i++) {
       const angle = Math.random() * Math.PI * 2;
       const r = Math.random() * cloudRadius * 0.7;
       const x = centerX + Math.cos(angle) * r;
@@ -74,7 +81,7 @@ export function InteractiveCloud() {
         y,
         vx: 0,
         vy: 0,
-        radius: 3 + Math.random() * 4,
+        radius: isMobileDevice ? 4 + Math.random() * 3 : 3 + Math.random() * 4,
         color: colors[Math.floor(Math.random() * colors.length)],
         phase: Math.random() * Math.PI * 2,
       });
@@ -103,6 +110,7 @@ export function InteractiveCloud() {
       if (newSize > 0) {
         setSize({ width: newSize, height: newSize });
       }
+      setMobile(isMobile());
     };
 
     updateSize();
@@ -116,7 +124,7 @@ export function InteractiveCloud() {
     const canvas = canvasRef.current;
     if (!canvas) return;
 
-    const ctx = canvas.getContext('2d');
+    const ctx = canvas.getContext('2d', { alpha: true });
     if (!ctx) return;
 
     const width = size.width;
@@ -125,28 +133,42 @@ export function InteractiveCloud() {
 
     const centerX = width / 2;
     const centerY = height / 2;
+    const isMobileDevice = mobile;
+    const targetFPS = isMobileDevice ? 30 : 60;
+    const frameInterval = 1000 / targetFPS;
 
-    initParticles(width, height);
+    initParticles(width, height, isMobileDevice);
 
-    const animate = () => {
+    const animate = (timestamp: number) => {
+      const elapsed = timestamp - lastFrameRef.current;
+      
+      if (elapsed < frameInterval) {
+        animationRef.current = requestAnimationFrame(animate);
+        return;
+      }
+      
+      lastFrameRef.current = timestamp - (elapsed % frameInterval);
       timeRef.current += 0.02;
+      
       ctx.clearRect(0, 0, width, height);
 
-      const gradient = ctx.createRadialGradient(
-        centerX, centerY, 0,
-        centerX, centerY, width * 0.35
-      );
-      gradient.addColorStop(0, 'rgba(59, 130, 246, 0.2)');
-      gradient.addColorStop(0.5, 'rgba(96, 165, 250, 0.1)');
-      gradient.addColorStop(1, 'rgba(0, 0, 0, 0)');
-      ctx.fillStyle = gradient;
-      ctx.beginPath();
-      ctx.arc(centerX, centerY, width * 0.45, 0, Math.PI * 2);
-      ctx.fill();
+      if (!isMobileDevice) {
+        const gradient = ctx.createRadialGradient(
+          centerX, centerY, 0,
+          centerX, centerY, width * 0.35
+        );
+        gradient.addColorStop(0, 'rgba(59, 130, 246, 0.2)');
+        gradient.addColorStop(0.5, 'rgba(96, 165, 250, 0.1)');
+        gradient.addColorStop(1, 'rgba(0, 0, 0, 0)');
+        ctx.fillStyle = gradient;
+        ctx.beginPath();
+        ctx.arc(centerX, centerY, width * 0.45, 0, Math.PI * 2);
+        ctx.fill();
+      }
 
       shockwavesRef.current = shockwavesRef.current.filter(wave => {
         wave.radius += 4;
-        wave.opacity -= 0.015;
+        wave.opacity -= 0.02;
         
         if (wave.opacity <= 0) return false;
 
@@ -156,111 +178,80 @@ export function InteractiveCloud() {
         ctx.lineWidth = 2;
         ctx.stroke();
 
-        const innerGradient = ctx.createRadialGradient(
-          wave.x, wave.y, wave.radius * 0.8,
-          wave.x, wave.y, wave.radius
-        );
-        innerGradient.addColorStop(0, 'rgba(59, 130, 246, 0)');
-        innerGradient.addColorStop(1, `rgba(147, 197, 253, ${wave.opacity * 0.3})`);
-        ctx.fillStyle = innerGradient;
-        ctx.beginPath();
-        ctx.arc(wave.x, wave.y, wave.radius, 0, Math.PI * 2);
-        ctx.fill();
-
         return true;
       });
 
-      particlesRef.current.forEach((particle) => {
-        const floatX = Math.sin(timeRef.current + particle.phase) * 8;
-        const floatY = Math.cos(timeRef.current * 0.7 + particle.phase) * 8;
-        const breathe = Math.sin(timeRef.current * 0.5 + particle.phase * 0.5) * 5;
+      const particles = particlesRef.current;
+      const time = timeRef.current;
 
-        const dx = particle.baseX - centerX;
-        const dy = particle.baseY - centerY;
-        const dist = Math.sqrt(dx * dx + dy * dy);
-        const breatheX = dist > 0 ? (dx / dist) * breathe : 0;
-        const breatheY = dist > 0 ? (dy / dist) * breathe : 0;
+      for (let i = 0; i < particles.length; i++) {
+        const particle = particles[i];
+        const floatX = Math.sin(time + particle.phase) * 6;
+        const floatY = Math.cos(time * 0.7 + particle.phase) * 6;
 
-        let targetX = particle.baseX + floatX + breatheX;
-        let targetY = particle.baseY + floatY + breatheY;
+        let targetX = particle.baseX + floatX;
+        let targetY = particle.baseY + floatY;
 
-        shockwavesRef.current.forEach(wave => {
+        const waves = shockwavesRef.current;
+        for (let w = 0; w < waves.length; w++) {
+          const wave = waves[w];
           const pdx = particle.x - wave.x;
           const pdy = particle.y - wave.y;
           const pdist = Math.sqrt(pdx * pdx + pdy * pdy);
           
           if (pdist > 0 && Math.abs(pdist - wave.radius) < 30) {
-            const force = wave.opacity * 15;
+            const force = wave.opacity * 12;
             targetX += (pdx / pdist) * force;
             targetY += (pdy / pdist) * force;
           }
-        });
+        }
 
-        particle.vx += (targetX - particle.x) * 0.08;
-        particle.vy += (targetY - particle.y) * 0.08;
-        particle.vx *= 0.92;
-        particle.vy *= 0.92;
+        particle.vx += (targetX - particle.x) * 0.1;
+        particle.vy += (targetY - particle.y) * 0.1;
+        particle.vx *= 0.9;
+        particle.vy *= 0.9;
         particle.x += particle.vx;
         particle.y += particle.vy;
 
-        const pulseScale = 1 + Math.sin(timeRef.current * 1.5 + particle.phase) * 0.15;
-        const drawRadius = particle.radius * pulseScale;
-        const gradientRadius = drawRadius * 2.5;
-
-        if (gradientRadius <= 0) return;
-
-        const particleGradient = ctx.createRadialGradient(
-          particle.x, particle.y, 0,
-          particle.x, particle.y, gradientRadius
-        );
-        
-        const colorMatch = particle.color.match(/hsl\((\d+),\s*(\d+)%,\s*(\d+)%\)/);
-        if (colorMatch) {
-          const [, h, s, l] = colorMatch;
-          particleGradient.addColorStop(0, `hsla(${h}, ${s}%, ${l}%, 0.8)`);
-          particleGradient.addColorStop(1, 'rgba(0, 0, 0, 0)');
-        } else {
-          particleGradient.addColorStop(0, particle.color);
-          particleGradient.addColorStop(1, 'rgba(0, 0, 0, 0)');
-        }
-
         ctx.beginPath();
-        ctx.arc(particle.x, particle.y, gradientRadius, 0, Math.PI * 2);
-        ctx.fillStyle = particleGradient;
+        ctx.arc(particle.x, particle.y, particle.radius, 0, Math.PI * 2);
+        ctx.fillStyle = particle.color;
         ctx.fill();
-      });
+      }
 
-      ctx.globalCompositeOperation = 'lighter';
-      for (let i = 0; i < particlesRef.current.length; i++) {
-        const p = particlesRef.current[i];
-        for (let j = i + 1; j < Math.min(i + 8, particlesRef.current.length); j++) {
-          const other = particlesRef.current[j];
-          const dx = p.x - other.x;
-          const dy = p.y - other.y;
-          const distance = Math.sqrt(dx * dx + dy * dy);
+      if (!isMobileDevice) {
+        ctx.globalCompositeOperation = 'lighter';
+        for (let i = 0; i < particles.length; i += 2) {
+          const p = particles[i];
+          for (let j = i + 2; j < Math.min(i + 6, particles.length); j += 2) {
+            const other = particles[j];
+            const dx = p.x - other.x;
+            const dy = p.y - other.y;
+            const distSq = dx * dx + dy * dy;
 
-          if (distance < 50 && distance > 0) {
-            const lineOpacity = (1 - distance / 50) * 0.2;
-            ctx.beginPath();
-            ctx.moveTo(p.x, p.y);
-            ctx.lineTo(other.x, other.y);
-            ctx.strokeStyle = `rgba(255, 255, 255, ${lineOpacity})`;
-            ctx.lineWidth = 0.5;
-            ctx.stroke();
+            if (distSq < 2500) {
+              const lineOpacity = (1 - Math.sqrt(distSq) / 50) * 0.15;
+              ctx.beginPath();
+              ctx.moveTo(p.x, p.y);
+              ctx.lineTo(other.x, other.y);
+              ctx.strokeStyle = `rgba(255, 255, 255, ${lineOpacity})`;
+              ctx.lineWidth = 0.5;
+              ctx.stroke();
+            }
           }
         }
+        ctx.globalCompositeOperation = 'source-over';
       }
-      ctx.globalCompositeOperation = 'source-over';
 
       animationRef.current = requestAnimationFrame(animate);
     };
 
-    animate();
+    animationRef.current = requestAnimationFrame(animate);
 
     return () => {
       cancelAnimationFrame(animationRef.current);
     };
-  }, [size, initParticles]);
+  }, [size, mobile, initParticles]);
 
   const handleInteraction = (e: React.MouseEvent<HTMLCanvasElement> | React.TouchEvent<HTMLCanvasElement>) => {
     const canvas = canvasRef.current;
