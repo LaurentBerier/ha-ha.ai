@@ -5,6 +5,10 @@ export interface JokeExchange {
 
 export const jokeExchangesFr: JokeExchange[] = [
   {
+      user: "slt cathy jtdore tro! tu me fai tro rire lol! g tro hate dte voir en show a mtl, c kan ta prochaine show stp??? rep stp",
+      cathy: "Apprends à écrire. Ça serait un bon début.",
+  },
+  {
     user: "pk tu guge tou?",
     cathy: "Parce que tu écris comme si t’avais 9 ans.",
   },
