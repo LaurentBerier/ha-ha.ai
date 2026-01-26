@@ -1,8 +1,7 @@
 import { type Language, copy } from '@/lib/i18n';
 import { Button } from '@/components/ui/button';
 import { ArrowRight } from 'lucide-react';
-import { InteractiveCloud } from './InteractiveCloud';
-import phoneImage from '@assets/Cellphone_Trans_1769281442558.png';
+import { ChatSimulation } from './ChatSimulation';
 
 interface HeroSectionProps {
   language: Language;
@@ -10,7 +9,6 @@ interface HeroSectionProps {
 
 export function HeroSection({ language }: HeroSectionProps) {
   const t = copy[language].hero;
-  const tOrb = copy[language].whatItIs;
 
   const scrollToWaitlist = () => {
     const element = document.getElementById('waitlist');
@@ -20,14 +18,14 @@ export function HeroSection({ language }: HeroSectionProps) {
   };
 
   return (
-    <section className="relative min-h-screen flex items-center justify-center pt-16 overflow-hidden">
+    <section className="relative min-h-screen flex items-center justify-center pt-16 pb-8 overflow-hidden">
       <div className="absolute inset-0 overflow-hidden">
         <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-primary/10 rounded-full blur-3xl animate-pulse-glow" />
         <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-secondary/10 rounded-full blur-3xl animate-pulse-glow" style={{ animationDelay: '2s' }} />
       </div>
 
       <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12 items-center">
           <div className="text-center lg:text-left order-2 lg:order-1">
             <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold mb-2 tracking-tight">
               <span className="bg-gradient-to-r from-primary via-secondary to-primary bg-clip-text text-transparent animate-gradient">
@@ -62,23 +60,17 @@ export function HeroSection({ language }: HeroSectionProps) {
             </div>
           </div>
 
-          <div className="order-1 lg:order-2 relative">
-            <div className="relative flex items-center justify-center">
-              <div className="relative w-full max-w-[340px] sm:max-w-[420px] md:max-w-[480px] mx-auto">
-                <img 
-                  src={phoneImage} 
-                  alt="Ha-Ha.ai App" 
-                  className="relative w-full h-auto z-10"
-                  data-testid="img-phone-mockup"
-                />
-                <div className="absolute inset-0 flex items-center justify-center z-20" style={{ top: '10%', bottom: '16%', left: '6%', right: '6%' }}>
-                  <InteractiveCloud />
+          <div className="order-1 lg:order-2 relative flex justify-center">
+            <div className="relative w-[280px] sm:w-[320px] md:w-[360px] h-[560px] sm:h-[640px] md:h-[720px]">
+              <div className="absolute -inset-4 bg-gradient-to-br from-orange-500/20 via-yellow-500/10 to-red-500/20 rounded-[3rem] blur-2xl" />
+              
+              <div className="relative w-full h-full bg-zinc-900 rounded-[2.5rem] border-4 border-zinc-800 shadow-2xl overflow-hidden">
+                <div className="absolute top-2 left-1/2 -translate-x-1/2 w-20 h-6 bg-black rounded-full z-10" />
+                
+                <div className="w-full h-full pt-4">
+                  <ChatSimulation language={language} />
                 </div>
               </div>
-              
-              <p className="absolute -bottom-8 left-1/2 -translate-x-1/2 text-sm text-muted-foreground/70 italic" data-testid="text-orb-hint">
-                {tOrb.orbHint}
-              </p>
             </div>
           </div>
         </div>
