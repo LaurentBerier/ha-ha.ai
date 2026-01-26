@@ -27,11 +27,13 @@ client/
 │   │   ├── WhatItIsSection.tsx    # Product explanation
 │   │   ├── WhatYouCanDoSection.tsx # 3 playful examples
 │   │   ├── PersonalitySection.tsx  # Cathy Gauthier feature
-│   │   ├── InteractiveCloud.tsx   # Animated orb (mobile-optimized)
+│   │   ├── ChatSimulation.tsx    # Interactive chat demo with typing animation
+│   │   ├── GoldOrb.tsx           # Animated gold orb (canvas-based, mobile-optimized)
 │   │   ├── WaitlistSection.tsx
-│   │   └── Footer.tsx             # With "more comedians" teaser
+│   │   └── Footer.tsx            # With "more comedians" teaser
 │   ├── lib/
 │   │   ├── i18n.ts               # Translations (FR/EN)
+│   │   ├── jokeExchanges.ts      # FR/EN joke pairs for chat simulation
 │   │   └── queryClient.ts
 │   ├── pages/
 │   │   └── LandingPage.tsx
@@ -47,7 +49,7 @@ shared/
 ## Key Features
 1. **Bilingual Support**: French (default) and English via header toggle
 2. **Dark Theme**: Black background with red/blue accent colors
-3. **Interactive Cloud**: Animated orb inside phone mockup, optimized for mobile
+3. **Interactive Chat Demo**: Gold orb + typing animation showing random joke exchanges
 4. **Email Waitlist**: Prominent CTA with comedy-first copy
 5. **Responsive Design**: Mobile-first, phone mockup scales 340px-480px
 
@@ -67,7 +69,7 @@ shared/
 - Background: Near black (#0a0a0a)
 - Primary: Red (hsl 0 72% 51%)
 - Secondary: Blue (hsl 220 70% 50%)
-- Cloud animation: Blue and white only
+- Gold orb: Orange/gold tones (#f97316, #fb923c)
 
 ## Running the Project
 ```bash
@@ -76,9 +78,15 @@ npm run dev
 Server starts on port 5000, serving both API and frontend.
 
 ## Recent Changes
+- January 2026: Interactive chat simulation in hero
+  - New ChatSimulation component with typing animation
+  - Gold orb that scales when "talking"
+  - 8 random FR/EN joke exchanges (jokeExchanges.ts)
+  - Same exchange persists across language toggle
+  - Mobile performance: 30fps, fewer particles on small screens
+  
 - January 2026: Content rewrite for comedy-first tone
   - New hero with prominent waitlist CTA
   - "What it is" and "What you can do" sections added
   - Removed corporate sections (Features, WhyItWorks)
   - Footer teaser about more comedians
-  - Mobile-optimized cloud animation (30fps, fewer particles)
