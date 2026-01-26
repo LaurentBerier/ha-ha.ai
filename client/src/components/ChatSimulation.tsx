@@ -1,10 +1,8 @@
-import { useState, useEffect, useCallback, useRef } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { type Language } from '@/lib/i18n';
 import { jokeExchangesFr, jokeExchangesEn } from '@/lib/jokeExchanges';
 import { Video, Mic, MoreHorizontal, X, Send, Smile } from 'lucide-react';
-import orbGif from '@assets/Orb_loop-ezgif.com-crop_1769400233703.gif';
-
-import Orb_loop_ezgif_com_optimize from "@assets/Orb_loop-ezgif.com-optimize.gif";
+import orbGif from "@assets/Orb_loop-ezgif.com-optimize.gif";
 
 interface ChatSimulationProps {
   language: Language;
@@ -13,17 +11,15 @@ interface ChatSimulationProps {
 type AnimationPhase = 'idle' | 'userTyping' | 'userMessage' | 'cathyTyping' | 'cathyMessage' | 'complete';
 
 export function ChatSimulation({ language }: ChatSimulationProps) {
-  const exchangeIndexRef = useRef<number>(-1);
+  const [exchangeIndex, setExchangeIndex] = useState(() => 
+    Math.floor(Math.random() * jokeExchangesFr.length)
+  );
   const [phase, setPhase] = useState<AnimationPhase>('idle');
   const [userText, setUserText] = useState('');
   const [cathyText, setCathyText] = useState('');
 
-  if (exchangeIndexRef.current === -1) {
-    exchangeIndexRef.current = Math.floor(Math.random() * jokeExchangesFr.length);
-  }
-
   const exchanges = language === 'fr' ? jokeExchangesFr : jokeExchangesEn;
-  const exchange = exchanges[exchangeIndexRef.current];
+  const exchange = exchanges[exchangeIndex];
 
   useEffect(() => {
     setPhase('idle');
@@ -35,7 +31,7 @@ export function ChatSimulation({ language }: ChatSimulationProps) {
     }, 800);
 
     return () => clearTimeout(startTimer);
-  }, [language]);
+  }, [language, exchangeIndex]);
 
   const typeText = useCallback((
     fullText: string, 
@@ -82,7 +78,15 @@ export function ChatSimulation({ language }: ChatSimulationProps) {
         setTimeout(() => setPhase('complete'), 500);
       });
     }
-  }, [phase, exchange, typeText]);
+
+    if (phase === 'complete') {
+      const loopTimer = setTimeout(() => {
+        const nextIndex = (exchangeIndex + 1) % jokeExchangesFr.length;
+        setExchangeIndex(nextIndex);
+      }, 4500);
+      return () => clearTimeout(loopTimer);
+    }
+  }, [phase, exchange, typeText, exchangeIndex]);
 
   const isCathyTalking = phase === 'cathyTyping' || phase === 'cathyMessage';
   const placeholderText = language === 'fr' ? 'Envoie un message à Cathy...' : 'Send a message to Cathy...';
@@ -96,7 +100,7 @@ export function ChatSimulation({ language }: ChatSimulationProps) {
           data-testid="orb-gif"
         >
           <img 
-            src={Orb_loop_ezgif_com_optimize} 
+            src={orbGif} 
             alt="AI Orb" 
             className="w-full h-full object-contain"
             loading="eager"
