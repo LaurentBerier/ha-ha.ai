@@ -46,7 +46,7 @@ export class DatabaseStorage implements IStorage {
   async createWaitlistEntry(insertEntry: InsertWaitlistEntry): Promise<WaitlistEntry> {
     const [entry] = await db
       .insert(waitlistEntries)
-      .values({ email: insertEntry.email.toLowerCase() })
+      .values({ email: insertEntry.email })
       .returning();
     return entry;
   }
