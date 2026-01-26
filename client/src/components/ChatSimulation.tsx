@@ -4,6 +4,8 @@ import { jokeExchangesFr, jokeExchangesEn } from '@/lib/jokeExchanges';
 import { Video, Mic, MoreHorizontal, X, Send, Smile } from 'lucide-react';
 import orbGif from '@assets/Orb_loop-ezgif.com-crop_1769400233703.gif';
 
+import Orb_loop_ezgif_com_optimize from "@assets/Orb_loop-ezgif.com-optimize.gif";
+
 interface ChatSimulationProps {
   language: Language;
 }
@@ -94,14 +96,13 @@ export function ChatSimulation({ language }: ChatSimulationProps) {
           data-testid="orb-gif"
         >
           <img 
-            src={orbGif} 
+            src={Orb_loop_ezgif_com_optimize} 
             alt="AI Orb" 
             className="w-full h-full object-contain"
             loading="eager"
           />
         </div>
       </div>
-
       <div className="flex-1 px-4 py-2 space-y-3 overflow-hidden">
         {(phase === 'userMessage' || phase === 'cathyTyping' || phase === 'cathyMessage' || phase === 'complete') && userText && (
           <div className="flex justify-end" data-testid="bubble-user">
@@ -131,7 +132,6 @@ export function ChatSimulation({ language }: ChatSimulationProps) {
           </div>
         )}
       </div>
-
       <div className="flex-shrink-0 px-4 pb-4 pt-2">
         <div className="flex items-center justify-center gap-4 mb-4">
           <button className="w-12 h-12 rounded-full bg-zinc-800 flex items-center justify-center" data-testid="button-chat-video">
