@@ -32,9 +32,10 @@ export function GoldOrb({ isTalking }: GoldOrbProps) {
     const centerX = size / 2;
     const centerY = size / 2;
     
-    const targetFPS = mobile ? 30 : 60;
+    const targetFPS = mobile ? 20 : 60;
     const frameInterval = 1000 / targetFPS;
-    const particleCount = mobile ? 10 : 20;
+    const particleCount = mobile ? 5 : 20;
+    const ringCount = mobile ? 1 : 3;
 
     const particles: { angle: number; radius: number; speed: number; size: number; opacity: number }[] = [];
     for (let i = 0; i < particleCount; i++) {
@@ -46,6 +47,18 @@ export function GoldOrb({ isTalking }: GoldOrbProps) {
         opacity: 0.3 + Math.random() * 0.5,
       });
     }
+
+    const outerGlow = ctx.createRadialGradient(centerX, centerY, 0, centerX, centerY, 90);
+    outerGlow.addColorStop(0, 'rgba(255, 180, 50, 0)');
+    outerGlow.addColorStop(0.5, 'rgba(255, 150, 30, 0.1)');
+    outerGlow.addColorStop(0.8, 'rgba(255, 120, 20, 0.05)');
+    outerGlow.addColorStop(1, 'rgba(255, 100, 0, 0)');
+
+    const coreGradient = ctx.createRadialGradient(centerX - 15, centerY - 15, 0, centerX, centerY, 55);
+    coreGradient.addColorStop(0, 'rgba(255, 220, 150, 0.9)');
+    coreGradient.addColorStop(0.3, 'rgba(255, 180, 80, 0.8)');
+    coreGradient.addColorStop(0.6, 'rgba(255, 140, 40, 0.6)');
+    coreGradient.addColorStop(1, 'rgba(255, 100, 20, 0.3)');
 
     const animate = (timestamp: number) => {
       const elapsed = timestamp - lastFrameRef.current;
@@ -71,21 +84,11 @@ export function GoldOrb({ isTalking }: GoldOrbProps) {
       ctx.scale(totalScale, totalScale);
       ctx.translate(-centerX, -centerY);
       
-      const outerGlow = ctx.createRadialGradient(centerX, centerY, 0, centerX, centerY, 90);
-      outerGlow.addColorStop(0, 'rgba(255, 180, 50, 0)');
-      outerGlow.addColorStop(0.5, 'rgba(255, 150, 30, 0.1)');
-      outerGlow.addColorStop(0.8, 'rgba(255, 120, 20, 0.05)');
-      outerGlow.addColorStop(1, 'rgba(255, 100, 0, 0)');
       ctx.fillStyle = outerGlow;
       ctx.beginPath();
       ctx.arc(centerX, centerY, 90, 0, Math.PI * 2);
       ctx.fill();
 
-      const coreGradient = ctx.createRadialGradient(centerX - 15, centerY - 15, 0, centerX, centerY, 55);
-      coreGradient.addColorStop(0, 'rgba(255, 220, 150, 0.9)');
-      coreGradient.addColorStop(0.3, 'rgba(255, 180, 80, 0.8)');
-      coreGradient.addColorStop(0.6, 'rgba(255, 140, 40, 0.6)');
-      coreGradient.addColorStop(1, 'rgba(255, 100, 20, 0.3)');
       ctx.fillStyle = coreGradient;
       ctx.beginPath();
       ctx.arc(centerX, centerY, 50, 0, Math.PI * 2);
@@ -96,7 +99,7 @@ export function GoldOrb({ isTalking }: GoldOrbProps) {
       ctx.rotate(timeRef.current * 0.3);
       ctx.translate(-centerX, -centerY);
       
-      for (let i = 0; i < 3; i++) {
+      for (let i = 0; i < ringCount; i++) {
         const ringOffset = i * (Math.PI * 2 / 3);
         ctx.beginPath();
         ctx.ellipse(

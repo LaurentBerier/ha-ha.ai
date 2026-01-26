@@ -1,7 +1,10 @@
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
+
+const isMobile = () => typeof window !== 'undefined' && window.innerWidth < 768;
 
 export function AnimatedBackground() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
+  const [mobile] = useState(isMobile);
 
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -12,6 +15,10 @@ export function AnimatedBackground() {
 
     let animationId: number;
     let particles: Particle[] = [];
+    let lastFrameTime = 0;
+    
+    const targetFPS = mobile ? 20 : 60;
+    const frameInterval = 1000 / targetFPS;
 
     const resize = () => {
       canvas.width = window.innerWidth;
@@ -61,13 +68,16 @@ export function AnimatedBackground() {
 
     const init = () => {
       particles = [];
-      const particleCount = Math.min(80, Math.floor((canvas.width * canvas.height) / 15000));
+      const baseCount = Math.floor((canvas.width * canvas.height) / 15000);
+      const particleCount = mobile ? Math.min(15, baseCount) : Math.min(80, baseCount);
       for (let i = 0; i < particleCount; i++) {
         particles.push(new Particle());
       }
     };
 
     const connectParticles = () => {
+      if (mobile) return;
+      
       for (let i = 0; i < particles.length; i++) {
         for (let j = i + 1; j < particles.length; j++) {
           const dx = particles[i].x - particles[j].x;
@@ -86,7 +96,16 @@ export function AnimatedBackground() {
       }
     };
 
-    const animate = () => {
+    const animate = (timestamp: number) => {
+      const elapsed = timestamp - lastFrameTime;
+      
+      if (elapsed < frameInterval) {
+        animationId = requestAnimationFrame(animate);
+        return;
+      }
+      
+      lastFrameTime = timestamp - (elapsed % frameInterval);
+      
       ctx.clearRect(0, 0, canvas.width, canvas.height);
 
       particles.forEach((particle) => {
@@ -100,18 +119,20 @@ export function AnimatedBackground() {
 
     resize();
     init();
-    animate();
+    animationId = requestAnimationFrame(animate);
 
-    window.addEventListener('resize', () => {
+    const handleResize = () => {
       resize();
       init();
-    });
+    };
+    
+    window.addEventListener('resize', handleResize);
 
     return () => {
       cancelAnimationFrame(animationId);
-      window.removeEventListener('resize', resize);
+      window.removeEventListener('resize', handleResize);
     };
-  }, []);
+  }, [mobile]);
 
   return (
     <canvas
