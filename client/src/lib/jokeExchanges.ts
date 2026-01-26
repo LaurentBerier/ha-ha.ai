@@ -5,6 +5,22 @@ export interface JokeExchange {
 
 export const jokeExchangesFr: JokeExchange[] = [
   {
+    user: "pk tu guge tou?",
+    cathy: "Parce que tu écris comme si t’avais 9 ans.",
+  },
+  {
+    user: "ta compri ske jveu dire?",
+    cathy: "Malheureusement, oui.",
+  },
+  {
+    user: "jsui pas bon en francais",
+    cathy: "Ça paraît. À chaque mot.",
+  },
+  {
+    user: "salut cathy sava?",
+    cathy: "Non. Mais ton français va encore moins bien.",
+  },
+  {
     user: "Cathy, j'ai besoin d'un conseil de vie.",
     cathy: "Ok, mais tu vas le regretter.",
   },
