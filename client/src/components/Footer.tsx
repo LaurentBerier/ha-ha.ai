@@ -29,7 +29,7 @@ export function Footer({ language }: FooterProps) {
 
           <div className="flex items-center gap-4">
             <a
-              href="mailto:cathy.gauthier@hotmail.com"
+              href="mailto:info@breakingwalls.co"
               className="text-sm text-muted-foreground hover:text-foreground transition-colors"
               data-testid="link-contact"
             >
