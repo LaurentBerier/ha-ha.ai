@@ -117,7 +117,8 @@ export function ChatSimulation({ language }: ChatSimulationProps) {
         )}
 
         {phase === 'cathyTyping' && !cathyText && (
-          <div className="flex justify-start" data-testid="bubble-typing">
+          <div className="flex flex-col items-start" data-testid="bubble-typing">
+            <span className="text-xs text-zinc-500 mb-1 ml-1">Cathy IA Gauthier</span>
             <div className="bg-zinc-800 text-white px-4 py-2.5 rounded-2xl rounded-bl-md">
               <div className="flex gap-1">
                 <span className="w-2 h-2 bg-zinc-500 rounded-full animate-bounce" style={{ animationDelay: '0ms' }} />
@@ -129,7 +130,8 @@ export function ChatSimulation({ language }: ChatSimulationProps) {
         )}
 
         {(phase === 'cathyMessage' || phase === 'complete') && cathyText && (
-          <div className="flex justify-start" data-testid="bubble-cathy">
+          <div className="flex flex-col items-start" data-testid="bubble-cathy">
+            <span className="text-xs text-zinc-500 mb-1 ml-1">Cathy IA Gauthier</span>
             <div className="bg-zinc-800 text-white px-4 py-2.5 rounded-2xl rounded-bl-md max-w-[85%] text-sm">
               {cathyText}
             </div>
