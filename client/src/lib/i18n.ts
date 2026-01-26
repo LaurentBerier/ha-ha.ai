@@ -8,8 +8,8 @@ export const copy = {
       contact: 'Contact',
     },
     hero: {
-      headline: 'Parle à la vraie Cathy "IA" Gauthier.',
-      subheadline: 'C\'est comme avoir Cathy dans ta poche, 24/7.',
+      headline: 'Cathy Gauthier, dans ta poche.',
+      subheadline: '24/7. Sans filtre.',
       description: 'Ha-Ha.ai, c\'est un chatbot comique qui imite de vrais humoristes. Ça parle, ça réagit, ça te roast.',
       ctaPrimary: 'Accès anticipé',
       ctaSecondary: 'Comment ça marche',
@@ -65,8 +65,8 @@ export const copy = {
       contact: 'Contact',
     },
     hero: {
-      headline: 'Talk to the real Cathy "AI" Gauthier.',
-      subheadline: 'It\'s like having Cathy in your pocket, 24/7.',
+      headline: 'Cathy Gauthier, in your pocket.',
+      subheadline: '24/7. Unfiltered.',
       description: 'Ha-Ha.ai is a comic chatbot that imitates real stand-up comedians. It talks, reacts, and roasts you.',
       ctaPrimary: 'Get early access',
       ctaSecondary: 'How it works',
