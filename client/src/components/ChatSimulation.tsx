@@ -1,8 +1,8 @@
 import { useState, useEffect, useCallback, useRef } from 'react';
 import { type Language } from '@/lib/i18n';
 import { jokeExchangesFr, jokeExchangesEn } from '@/lib/jokeExchanges';
-import { GoldOrb } from './GoldOrb';
 import { Video, Mic, MoreHorizontal, X, Send, Smile } from 'lucide-react';
+import orbGif from '@assets/Orb_loop-ezgif.com-crop_1769400233703.gif';
 
 interface ChatSimulationProps {
   language: Language;
@@ -88,7 +88,18 @@ export function ChatSimulation({ language }: ChatSimulationProps) {
   return (
     <div className="w-full h-full flex flex-col bg-black rounded-[2rem] overflow-hidden">
       <div className="flex-shrink-0 pt-8 pb-4 flex items-center justify-center">
-        <GoldOrb isTalking={isCathyTalking} />
+        <div 
+          className="w-[180px] h-[180px] transition-transform duration-300"
+          style={{ transform: isCathyTalking ? 'scale(1.1)' : 'scale(1)' }}
+          data-testid="orb-gif"
+        >
+          <img 
+            src={orbGif} 
+            alt="AI Orb" 
+            className="w-full h-full object-contain"
+            loading="eager"
+          />
+        </div>
       </div>
 
       <div className="flex-1 px-4 py-2 space-y-3 overflow-hidden">
