@@ -27,9 +27,9 @@ export default function LandingPage() {
       <main className="relative z-10">
         <HeroSection language={language} />
         <Suspense fallback={<div className="h-32" />}>
+          <PersonalitySection language={language} />
           <WhatItIsSection language={language} />
           <WhatYouCanDoSection language={language} />
-          <PersonalitySection language={language} />
           <WaitlistSection language={language} />
         </Suspense>
       </main>

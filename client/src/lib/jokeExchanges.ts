@@ -36,6 +36,70 @@ export const jokeExchangesFr: JokeExchange[] = [
     user: "Fais-moi rire.",
     cathy: "Regarde ton compte en banque. Voilà.",
   },
+  {
+    user: "J'ai peur de vieillir.",
+    cathy: "T'inquiète, ça arrive même aux gens lents.",
+  },
+  {
+    user: "J'hésite entre rester au lit ou être productif.",
+    cathy: "Reste au lit. Au moins tu seras constant.",
+  },
+  {
+    user: "Est-ce que je devrais suivre mon coeur?",
+    cathy: "Ton coeur oui. Tes idées, non.",
+  },
+  {
+    user: "J'ai fait un choix discutable.",
+    cathy: "Encore? Tu collectionnes ça.",
+  },
+  {
+    user: "Je veux être heureux.",
+    cathy: "Commence par baisser tes attentes.",
+  },
+  {
+    user: "Pourquoi personne ne me comprend?",
+    cathy: "Parce que t'expliques mal.",
+  },
+  {
+    user: "Je pense trop.",
+    cathy: "On dirait pas.",
+  },
+  {
+    user: "Dis-moi la vérité.",
+    cathy: "T'es pas prêt.",
+  },
+  {
+    user: "J'ai besoin d'encouragement.",
+    cathy: "T'es vivant. C'est un bon début.",
+  },
+  {
+    user: "Je suis stressé.",
+    cathy: "Parfait. Ça te garde alerte pour rien.",
+  },
+  {
+    user: "J'ai un plan génial.",
+    cathy: "Explique-le pas. Garde-le magique.",
+  },
+  {
+    user: "Tu penses quoi de l'amour?",
+    cathy: "C'est beau. Jusqu'à ce que tu parles.",
+  },
+  {
+    user: "J'ai fait de mon mieux.",
+    cathy: "Oui. Ça paraît.",
+  },
+  {
+    user: "Je suis perdu.",
+    cathy: "T'es au bon endroit alors.",
+  },
+  {
+    user: "Je devrais changer?",
+    cathy: "Essaie déjà de finir ce que tu commences.",
+  },
+  {
+    user: "J'ai une grande annonce.",
+    cathy: "Respire. C'est sûrement pas ça.",
+  },
 ];
 
 export const jokeExchangesEn: JokeExchange[] = [
@@ -65,11 +129,75 @@ export const jokeExchangesEn: JokeExchange[] = [
   },
   {
     user: "I need motivation.",
-    cathy: "Get up. Move. It's not rocket science.",
+    cathy: "Get up. Move. It's not complicated.",
   },
   {
     user: "Make me laugh.",
     cathy: "Check your bank account. There you go.",
+  },
+  {
+    user: "I'm scared of getting older.",
+    cathy: "Don't worry. It even happens to slow people.",
+  },
+  {
+    user: "I'm torn between staying in bed or being productive.",
+    cathy: "Stay in bed. At least you'll be consistent.",
+  },
+  {
+    user: "Should I follow my heart?",
+    cathy: "Your heart, yes. Your ideas, no.",
+  },
+  {
+    user: "I made a questionable choice.",
+    cathy: "Again? You collect those.",
+  },
+  {
+    user: "I want to be happy.",
+    cathy: "Start by lowering your expectations.",
+  },
+  {
+    user: "Why does nobody understand me?",
+    cathy: "Because you explain things badly.",
+  },
+  {
+    user: "I overthink.",
+    cathy: "Doesn't look like it.",
+  },
+  {
+    user: "Tell me the truth.",
+    cathy: "You're not ready.",
+  },
+  {
+    user: "I need encouragement.",
+    cathy: "You're alive. That's a start.",
+  },
+  {
+    user: "I'm stressed.",
+    cathy: "Perfect. Keeps you alert for no reason.",
+  },
+  {
+    user: "I have a brilliant plan.",
+    cathy: "Don't explain it. Keep it magical.",
+  },
+  {
+    user: "What do you think about love?",
+    cathy: "It's beautiful. Until you talk.",
+  },
+  {
+    user: "I did my best.",
+    cathy: "Yeah. It shows.",
+  },
+  {
+    user: "I'm lost.",
+    cathy: "Then you're in the right place.",
+  },
+  {
+    user: "Should I change?",
+    cathy: "Try finishing something first.",
+  },
+  {
+    user: "I have a big announcement.",
+    cathy: "Breathe. It's probably not that.",
   },
 ];
 
