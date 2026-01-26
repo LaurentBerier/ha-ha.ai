@@ -40,13 +40,6 @@ export function Header({ language, onLanguageChange }: HeaderProps) {
             >
               {t.nav.features}
             </button>
-            <button
-              onClick={() => scrollToSection('how-it-works')}
-              className="text-sm text-muted-foreground hover:text-foreground transition-colors"
-              data-testid="link-how-it-works"
-            >
-              {t.nav.howItWorks}
-            </button>
           </nav>
 
           <div className="flex items-center gap-2">

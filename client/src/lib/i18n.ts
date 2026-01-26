@@ -4,193 +4,115 @@ export const copy = {
   fr: {
     nav: {
       logo: 'Ha-Ha.ai',
-      howItWorks: 'Comment ça marche',
-      features: 'Fonctionnalités',
+      features: 'Ce que tu peux faire',
       contact: 'Contact',
     },
     hero: {
-      headline: 'Ha-Ha.ai',
-      subheadline: 'Une IA d\'humour 100 % québécoise',
-      description: 'Un assistant vocal qui comprend notre langue, notre accent et notre humour.',
-      ctaPrimary: 'Rejoindre la liste d\'attente',
-      ctaSecondary: 'Découvrir comment ça marche',
+      headline: 'Parle à une humoriste.',
+      subheadline: 'Pour vrai.',
+      description: 'Ha-Ha.ai, c\'est un chatbot comique qui imite de vrais humoristes. Ça parle, ça réagit, ça te roast. La première voix: Cathy Gauthier.',
+      ctaPrimary: 'Accès anticipé',
+      ctaSecondary: 'Comment ça marche',
+      waitlistHeadline: 'Sois dans les premiers à te faire roaster.',
+      waitlistDescription: 'Rejoins la liste de développement. Teste le chatbot avant tout le monde et aide-nous à façonner sa personnalité.',
     },
-    features: {
-      title: 'Ce qui nous rend uniques',
+    whatItIs: {
+      title: 'C\'est quoi Ha-Ha.ai?',
+      description: 'Un chatbot qui parle comme une vraie humoriste. Par texte ou par voix, n\'importe quand. Pas un assistant beige. Pas un outil de productivité. Juste de l\'humour, du timing, et de l\'attitude.',
+      orbHint: 'Touche l\'orbe. Elle réagit.',
+    },
+    whatYouCanDo: {
+      title: 'Ce que tu peux faire',
       items: [
         {
-          title: 'Assistant vocal québécois',
-          description: 'Comprend l\'accent et les expressions d\'ici',
+          title: 'Demande un conseil. Regrette-le.',
+          description: 'Elle va te répondre. Mais pas comme tu veux.',
         },
         {
-          title: 'Humour, roast et impro',
-          description: 'Des réponses qui font rire, pas juste des infos',
+          title: 'Fais-toi roaster sur demande.',
+          description: 'T\'as besoin qu\'on te remette à ta place? C\'est gratuit.',
         },
         {
-          title: 'Une vraie personnalité',
-          description: 'Pas un robot beige, une vraie présence',
-        },
-        {
-          title: 'Références locales',
-          description: 'Connaît notre culture et nos expressions',
+          title: 'Tue le temps avec une IA qui a de l\'attitude.',
+          description: 'Pas de "Comment puis-je vous aider?" Juste du vrai contenu.',
         },
       ],
     },
     personality: {
       title: 'Cathy Gauthier',
-      subtitle: 'La voix de Ha-Ha.ai',
-      description: 'Authentique et sans filtre. Drôle et spontanée. Chaque interaction devient un moment. Son énergie fait qu\'on a envie de l\'entendre, même pour demander la météo.',
+      subtitle: 'La première voix de Ha-Ha.ai',
+      description: 'Authentique. Sans filtre. Drôle même quand elle te dit non. Son énergie fait qu\'on a envie de l\'entendre, même pour demander la météo.',
       traits: ['Authentique', 'Sans filtre', 'Drôle', 'Spontanée'],
     },
-    examples: {
-      title: 'Ce que Ha-Ha.ai peut faire',
-      items: [
-        {
-          title: 'Mode blagues',
-          description: 'Des jokes sur demande, adaptées à ton humeur',
-        },
-        {
-          title: 'Mode Roast',
-          description: 'Besoin de te faire brasser? Elle te dit tes quatre vérités',
-        },
-        {
-          title: 'GPS sarcastique',
-          description: 'Des directions avec commentaires. "T\'as encore manqué la sortie!"',
-        },
-        {
-          title: 'Questions du quotidien',
-          description: 'Météo, actualités et rappels avec une twist',
-        },
-      ],
-    },
-    whyItWorks: {
-      title: 'Pourquoi ça va fonctionner',
-      items: [
-        {
-          title: 'Impossible à copier',
-          description: 'Notre langue, notre rythme, nos références',
-        },
-        {
-          title: 'Connexion émotionnelle',
-          description: 'Une technologie qui nous ressemble',
-        },
-        {
-          title: 'Différenciation totale',
-          description: 'La seule option avec du caractère',
-        },
-        {
-          title: 'Marché naturel',
-          description: '8,5 millions de Québécois qui veulent du contenu d\'ici',
-        },
-      ],
-    },
     cta: {
-      title: 'Le Québec mérite une IA qui lui ressemble',
-      description: 'Sois parmi les premiers à découvrir Ha-Ha.ai',
+      title: 'Fais partie des premiers.',
+      description: 'Teste le chatbot en avant-première et aide-nous à bâtir quelque chose de drôle.',
       placeholder: 'Ton courriel',
-      button: 'Être parmi les premiers',
-      success: 'Merci! Tu es sur la liste.',
-      error: 'Une erreur est survenue. Réessaie.',
+      button: 'Rejoindre la liste',
+      success: 'T\'es dedans. On te revient bientôt.',
+      error: 'Oups. Réessaie.',
     },
     footer: {
       copyright: '© 2026 Ha-Ha.ai. Tous droits réservés.',
       contact: 'Contact',
+      moreComingSoon: 'D\'autres humoristes s\'en viennent.',
     },
   },
   en: {
     nav: {
       logo: 'Ha-Ha.ai',
-      howItWorks: 'How it works',
-      features: 'Features',
+      features: 'What you can do',
       contact: 'Contact',
     },
     hero: {
-      headline: 'Ha-Ha.ai',
-      subheadline: 'A 100% Quebec-born humorous AI',
-      description: 'A voice assistant that understands language, culture, and local humor.',
-      ctaPrimary: 'Join the waitlist',
+      headline: 'Talk to a comedian.',
+      subheadline: 'For real.',
+      description: 'Ha-Ha.ai is a comic chatbot that imitates real stand-up comedians. It talks, reacts, and roasts you. First voice: Cathy Gauthier.',
+      ctaPrimary: 'Get early access',
       ctaSecondary: 'How it works',
+      waitlistHeadline: 'Be among the first to get roasted.',
+      waitlistDescription: 'Join the dev waitlist. Test the chatbot before anyone else and help shape how it talks back.',
     },
-    features: {
-      title: 'What makes us different',
+    whatItIs: {
+      title: 'What is Ha-Ha.ai?',
+      description: 'A chatbot that talks like a real comedian. By text or voice, anytime. Not a bland assistant. Not a productivity tool. Just humor, timing, and attitude.',
+      orbHint: 'Touch the orb. It reacts.',
+    },
+    whatYouCanDo: {
+      title: 'What you can do',
       items: [
         {
-          title: 'Quebec-born voice assistant',
-          description: 'Understands local accent and expressions',
+          title: 'Ask for advice. Regret it.',
+          description: 'She\'ll answer. Just not how you want.',
         },
         {
-          title: 'Humor, roast, and improv',
-          description: 'Responses that make you laugh, not just inform',
+          title: 'Get roasted on demand.',
+          description: 'Need to be put in your place? It\'s free.',
         },
         {
-          title: 'A real personality',
-          description: 'Not a bland robot, a real presence',
-        },
-        {
-          title: 'Local references',
-          description: 'Knows the culture and expressions',
+          title: 'Kill time with an AI that has attitude.',
+          description: 'No "How may I help you?" Just real content.',
         },
       ],
     },
     personality: {
       title: 'Cathy Gauthier',
-      subtitle: 'The voice of Ha-Ha.ai',
-      description: 'Authentic and unfiltered. Funny and spontaneous. Every interaction becomes a moment. Her energy makes you want to hear her, even just to ask about the weather.',
+      subtitle: 'The first voice of Ha-Ha.ai',
+      description: 'Authentic. Unfiltered. Funny even when she says no. Her energy makes you want to hear her, even just to ask about the weather.',
       traits: ['Authentic', 'Unfiltered', 'Funny', 'Spontaneous'],
     },
-    examples: {
-      title: 'What Ha-Ha.ai can do',
-      items: [
-        {
-          title: 'Joke mode',
-          description: 'Jokes on demand, adapted to your mood',
-        },
-        {
-          title: 'Roast mode',
-          description: 'Need a wake-up call? She tells it like it is',
-        },
-        {
-          title: 'Sarcastic GPS',
-          description: 'Directions with commentary. "Missed the exit again!"',
-        },
-        {
-          title: 'Everyday questions',
-          description: 'Weather, news, and reminders with attitude',
-        },
-      ],
-    },
-    whyItWorks: {
-      title: 'Why it works',
-      items: [
-        {
-          title: 'Hard to replicate',
-          description: 'Our language, our rhythm, our references',
-        },
-        {
-          title: 'Emotional connection',
-          description: 'Technology that feels like home',
-        },
-        {
-          title: 'Clear differentiation',
-          description: 'The only option with real character',
-        },
-        {
-          title: 'Natural market',
-          description: '8.5 million Quebecers wanting local content',
-        },
-      ],
-    },
     cta: {
-      title: 'Quebec deserves an AI that sounds like home',
-      description: 'Be among the first to discover Ha-Ha.ai',
+      title: 'Be among the first.',
+      description: 'Test the chatbot early and help us build something funny.',
       placeholder: 'Your email',
-      button: 'Get early access',
-      success: 'Thanks! You\'re on the list.',
-      error: 'Something went wrong. Try again.',
+      button: 'Join the waitlist',
+      success: 'You\'re in. We\'ll be in touch.',
+      error: 'Oops. Try again.',
     },
     footer: {
       copyright: '© 2026 Ha-Ha.ai. All rights reserved.',
       contact: 'Contact',
+      moreComingSoon: 'More comedians coming soon.',
     },
   },
 } as const;
