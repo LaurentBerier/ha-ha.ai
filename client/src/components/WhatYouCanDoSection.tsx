@@ -1,5 +1,5 @@
 import { type Language, copy } from '@/lib/i18n';
-import { MessageCircle, Flame, Sparkles } from 'lucide-react';
+import { Sun, Brain, MessageSquare, HeartHandshake, Flame, Navigation } from 'lucide-react';
 
 interface WhatYouCanDoSectionProps {
   language: Language;
@@ -8,7 +8,7 @@ interface WhatYouCanDoSectionProps {
 export function WhatYouCanDoSection({ language }: WhatYouCanDoSectionProps) {
   const t = copy[language].whatYouCanDo;
   
-  const icons = [MessageCircle, Flame, Sparkles];
+  const icons = [Sun, Brain, MessageSquare, HeartHandshake, Flame, Navigation];
 
   return (
     <section id="features" className="py-20 sm:py-28 relative">
@@ -17,9 +17,9 @@ export function WhatYouCanDoSection({ language }: WhatYouCanDoSectionProps) {
           {t.title}
         </h2>
         
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {t.items.map((item, index) => {
-            const Icon = icons[index];
+            const Icon = icons[index % icons.length];
             return (
               <div 
                 key={index} 
@@ -27,14 +27,14 @@ export function WhatYouCanDoSection({ language }: WhatYouCanDoSectionProps) {
                 data-testid={`card-feature-${index}`}
               >
                 <div className="absolute -inset-1 bg-gradient-to-r from-primary/20 to-secondary/20 rounded-2xl blur-lg opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-                <div className="relative bg-card/50 backdrop-blur-sm border border-border/50 rounded-2xl p-8 h-full">
-                  <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-primary/20 to-secondary/20 flex items-center justify-center mb-6">
-                    <Icon className="w-6 h-6 text-primary" />
+                <div className="relative bg-card/50 backdrop-blur-sm border border-border/50 rounded-2xl p-6 h-full">
+                  <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-primary/20 to-secondary/20 flex items-center justify-center mb-4">
+                    <Icon className="w-5 h-5 text-primary" />
                   </div>
-                  <h3 className="text-xl font-bold mb-3" data-testid={`text-feature-title-${index}`}>
+                  <h3 className="text-lg font-bold mb-2" data-testid={`text-feature-title-${index}`}>
                     {item.title}
                   </h3>
-                  <p className="text-muted-foreground" data-testid={`text-feature-description-${index}`}>
+                  <p className="text-sm text-muted-foreground" data-testid={`text-feature-description-${index}`}>
                     {item.description}
                   </p>
                 </div>

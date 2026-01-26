@@ -22,19 +22,31 @@ export const copy = {
       orbHint: 'Touche l\'orbe. Elle réagit.',
     },
     whatYouCanDo: {
-      title: 'Ce que tu peux faire',
+      title: 'Ce que l\'IA de Cathy peut faire',
       items: [
         {
-          title: 'Demande un conseil. Regrette-le.',
-          description: 'Elle va te répondre. Mais pas comme tu veux.',
+          title: 'Te réveiller avec une joke',
+          description: 'Oublie les alarmes plates. Cathy te sort du lit avec une joke qui te met de bonne humeur.',
         },
         {
-          title: 'Fais-toi roaster sur demande.',
-          description: 'T\'as besoin qu\'on te remette à ta place? C\'est gratuit.',
+          title: 'Le mode "T\'es ben épais"',
+          description: 'Quand tu poses une question stupide, Cathy te le dit. Pas de filtre.',
         },
         {
-          title: 'Tue le temps avec une IA qui a de l\'attitude.',
-          description: 'Pas de "Comment puis-je vous aider?" Juste du vrai contenu.',
+          title: 'Lecture de textos avec jugement intégré',
+          description: 'Elle lit tes messages... et elle te demande pourquoi tu écris encore comme si t\'avais 14 ans.',
+        },
+        {
+          title: 'Coach de vie brutalement honnête',
+          description: 'Elle t\'aide à avancer... mais pas seulement avec des phrases inspirantes. Avec des coups de pied virtuels aussi.',
+        },
+        {
+          title: 'Mode Roast',
+          description: 'Besoin de te faire brasser? Cathy te dit tes quatre vérités avec humour.',
+        },
+        {
+          title: 'GPS sarcastique',
+          description: 'Des directions avec commentaires. "T\'as encore manqué la sortie champion!"',
         },
       ],
     },
@@ -79,19 +91,31 @@ export const copy = {
       orbHint: 'Touch the orb. It reacts.',
     },
     whatYouCanDo: {
-      title: 'What you can do',
+      title: 'What Cathy\'s AI can do',
       items: [
         {
-          title: 'Ask for advice. Regret it.',
-          description: 'She\'ll answer. Just not how you want.',
+          title: 'Wake you up with a joke',
+          description: 'Forget boring alarms. Cathy gets you out of bed with a joke that puts you in a good mood.',
         },
         {
-          title: 'Get roasted on demand.',
-          description: 'Need to be put in your place? It\'s free.',
+          title: 'The "You\'re so dense" mode',
+          description: 'When you ask a dumb question, Cathy tells you. No filter.',
         },
         {
-          title: 'Kill time with an AI that has attitude.',
-          description: 'No "How may I help you?" Just real content.',
+          title: 'Text reading with built-in judgment',
+          description: 'She reads your messages... and asks why you still write like you\'re 14.',
+        },
+        {
+          title: 'Brutally honest life coach',
+          description: 'She helps you move forward... but not just with inspirational quotes. Virtual kicks too.',
+        },
+        {
+          title: 'Roast Mode',
+          description: 'Need to get roasted? Cathy tells you hard truths with humor.',
+        },
+        {
+          title: 'Sarcastic GPS',
+          description: 'Directions with commentary. "You missed the exit again, champion!"',
         },
       ],
     },
