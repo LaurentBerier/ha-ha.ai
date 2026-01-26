@@ -10,13 +10,6 @@ interface HeaderProps {
 export function Header({ language, onLanguageChange }: HeaderProps) {
   const t = copy[language];
 
-  const scrollToSection = (id: string) => {
-    const element = document.getElementById(id);
-    if (element) {
-      element.scrollIntoView({ behavior: 'smooth' });
-    }
-  };
-
   return (
     <header className="fixed top-0 left-0 right-0 z-50 bg-background/80 backdrop-blur-md border-b border-border/50">
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -31,16 +24,6 @@ export function Header({ language, onLanguageChange }: HeaderProps) {
               {t.nav.logo}
             </span>
           </div>
-
-          <nav className="hidden md:flex items-center gap-6">
-            <button
-              onClick={() => scrollToSection('features')}
-              className="text-sm text-muted-foreground hover:text-foreground transition-colors"
-              data-testid="link-features"
-            >
-              {t.nav.features}
-            </button>
-          </nav>
 
           <div className="flex items-center gap-2">
             <div className="flex items-center bg-muted rounded-md p-0.5">
