@@ -50,7 +50,7 @@ export function WaitlistSection({ language }: WaitlistSectionProps) {
   };
 
   return (
-    <section id="waitlist" className="py-24 relative overflow-hidden">
+    <section id="waitlist" className="py-12 sm:py-16 relative overflow-hidden">
       <div 
         className="absolute inset-0 opacity-20"
         style={{

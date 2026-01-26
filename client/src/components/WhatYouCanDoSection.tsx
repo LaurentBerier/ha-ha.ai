@@ -11,9 +11,9 @@ export function WhatYouCanDoSection({ language }: WhatYouCanDoSectionProps) {
   const icons = [Sun, Brain, MessageSquare, HeartHandshake, Flame, Navigation];
 
   return (
-    <section id="features" className="py-20 sm:py-28 relative">
+    <section id="features" className="py-12 sm:py-16 relative">
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-        <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold text-center mb-16" data-testid="text-whatyoucando-title">
+        <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold text-center mb-10" data-testid="text-whatyoucando-title">
           {t.title}
         </h2>
         
