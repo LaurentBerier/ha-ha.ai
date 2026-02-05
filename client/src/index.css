@@ -287,10 +287,26 @@
 }
 
 @keyframes orb-talk {
-  0%, 100% { transform: scale(1); }
-  50% { transform: scale(1.15); }
+  0% { transform: scale(1); }
+  5% { transform: scale(1.12); }
+  10% { transform: scale(1.02); }
+  15% { transform: scale(1.18); }
+  22% { transform: scale(1); }
+  28% { transform: scale(1.08); }
+  32% { transform: scale(1.15); }
+  38% { transform: scale(1.03); }
+  45% { transform: scale(1); }
+  48% { transform: scale(1); }
+  55% { transform: scale(1.14); }
+  60% { transform: scale(1.05); }
+  68% { transform: scale(1.1); }
+  75% { transform: scale(1); }
+  82% { transform: scale(1.16); }
+  88% { transform: scale(1.04); }
+  94% { transform: scale(1.1); }
+  100% { transform: scale(1); }
 }
 
 .animate-orb-talk {
-  animation: orb-talk 0.3s ease-in-out infinite;
+  animation: orb-talk 1.8s ease-in-out infinite;
 }
