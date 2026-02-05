@@ -10,9 +10,25 @@ interface ChatSimulationProps {
 
 type AnimationPhase = 'idle' | 'userTyping' | 'userMessage' | 'cathyTyping' | 'cathyMessage' | 'complete';
 
+const userNames = [
+  'Mario L.',
+  'Stéphane G.',
+  'Marie O.',
+  'Jean-François T.',
+  'Sophie B.',
+  'Patrick R.',
+  'Isabelle M.',
+  'Martin D.',
+  'Nathalie C.',
+  'Éric P.',
+];
+
 export function ChatSimulation({ language }: ChatSimulationProps) {
   const [exchangeIndex, setExchangeIndex] = useState(() => 
     Math.floor(Math.random() * jokeExchangesFr.length)
+  );
+  const [userName, setUserName] = useState(() => 
+    userNames[Math.floor(Math.random() * userNames.length)]
   );
   const [phase, setPhase] = useState<AnimationPhase>('idle');
   const [userText, setUserText] = useState('');
@@ -83,6 +99,7 @@ export function ChatSimulation({ language }: ChatSimulationProps) {
       const loopTimer = setTimeout(() => {
         const nextIndex = (exchangeIndex + 1) % jokeExchangesFr.length;
         setExchangeIndex(nextIndex);
+        setUserName(userNames[Math.floor(Math.random() * userNames.length)]);
       }, 4500);
       return () => clearTimeout(loopTimer);
     }
@@ -109,7 +126,8 @@ export function ChatSimulation({ language }: ChatSimulationProps) {
       </div>
       <div className="flex-1 px-4 py-2 space-y-3 overflow-hidden">
         {(phase === 'userMessage' || phase === 'cathyTyping' || phase === 'cathyMessage' || phase === 'complete') && userText && (
-          <div className="flex justify-end" data-testid="bubble-user">
+          <div className="flex flex-col items-end" data-testid="bubble-user">
+            <span className="text-xs text-zinc-500 mb-1 mr-1" data-testid="text-user-name">{userName}</span>
             <div className="bg-blue-500 text-white px-4 py-2.5 rounded-2xl rounded-br-md max-w-[85%] text-sm">
               {userText}
             </div>
