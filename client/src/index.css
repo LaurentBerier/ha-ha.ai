@@ -285,3 +285,12 @@
   background-size: 200% 200%;
   animation: gradient-shift 8s ease infinite;
 }
+
+@keyframes orb-talk {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.15); }
+}
+
+.animate-orb-talk {
+  animation: orb-talk 0.3s ease-in-out infinite;
+}

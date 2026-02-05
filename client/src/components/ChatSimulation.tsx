@@ -112,8 +112,7 @@ export function ChatSimulation({ language }: ChatSimulationProps) {
     <div className="w-full h-full flex flex-col bg-black rounded-[2rem] overflow-hidden">
       <div className="flex-shrink-0 pt-8 pb-4 flex items-center justify-center">
         <div 
-          className="w-[180px] h-[180px] transition-transform duration-300"
-          style={{ transform: isCathyTalking ? 'scale(1.1)' : 'scale(1)' }}
+          className={`w-[180px] h-[180px] ${isCathyTalking ? 'animate-orb-talk' : ''}`}
           data-testid="orb-gif"
         >
           <img 
