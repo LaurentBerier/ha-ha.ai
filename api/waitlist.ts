@@ -1,42 +1,60 @@
-import type { VercelRequest, VercelResponse } from '@vercel/node';
+import type { VercelRequest, VercelResponse } from "@vercel/node";
+import { getPool } from "./_db";
 
-// In-memory storage (note: resets on cold starts in serverless)
-// For production, use a database like Vercel KV or Postgres
-const waitlist: Set<string> = new Set();
+export default async function handler(
+  req: VercelRequest,
+  res: VercelResponse
+) {
+  res.setHeader("Access-Control-Allow-Origin", "*");
+  res.setHeader("Access-Control-Allow-Methods", "GET, POST, OPTIONS");
+  res.setHeader("Access-Control-Allow-Headers", "Content-Type");
 
-export default async function handler(req: VercelRequest, res: VercelResponse) {
-  // Enable CORS
-  res.setHeader('Access-Control-Allow-Origin', '*');
-  res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
-  res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
-
-  if (req.method === 'OPTIONS') {
+  if (req.method === "OPTIONS") {
     return res.status(200).end();
   }
 
-  if (req.method === 'POST') {
+  if (req.method === "POST") {
     try {
       const { email } = req.body;
-      
-      if (!email || typeof email !== 'string') {
-        return res.status(400).json({ error: 'Email is required' });
+
+      if (!email || typeof email !== "string") {
+        return res.status(400).json({ error: "Email is required" });
       }
 
       const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
       if (!emailRegex.test(email)) {
-        return res.status(400).json({ error: 'Invalid email format' });
+        return res.status(400).json({ error: "Invalid email format" });
       }
 
-      waitlist.add(email.toLowerCase());
-      
-      return res.status(200).json({ 
-        success: true, 
-        message: 'Added to waitlist' 
+      const normalizedEmail = email.toLowerCase().trim();
+      const pool = getPool();
+
+      const existing = await pool.query(
+        'SELECT id, email, created_at AS "createdAt" FROM waitlist_entries WHERE email = $1',
+        [normalizedEmail]
+      );
+
+      if (existing.rows.length > 0) {
+        return res.status(200).json({
+          message: "Already on waitlist",
+          entry: existing.rows[0],
+        });
+      }
+
+      const result = await pool.query(
+        'INSERT INTO waitlist_entries (id, email, created_at) VALUES (gen_random_uuid(), $1, NOW()) RETURNING id, email, created_at AS "createdAt"',
+        [normalizedEmail]
+      );
+
+      return res.status(201).json({
+        message: "Successfully added to waitlist",
+        entry: result.rows[0],
       });
     } catch (error) {
-      return res.status(500).json({ error: 'Internal server error' });
+      console.error("Waitlist error:", error);
+      return res.status(500).json({ error: "Failed to join waitlist" });
     }
   }
 
-  return res.status(405).json({ error: 'Method not allowed' });
+  return res.status(405).json({ error: "Method not allowed" });
 }
