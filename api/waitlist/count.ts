@@ -1,5 +1,5 @@
 import type { VercelRequest, VercelResponse } from "@vercel/node";
-import { getPool } from "../_db";
+import { getDb } from "../_db";
 
 export default async function handler(
   req: VercelRequest,
@@ -15,11 +15,11 @@ export default async function handler(
 
   if (req.method === "GET") {
     try {
-      const pool = getPool();
-      const result = await pool.query(
-        "SELECT COUNT(*) as count FROM waitlist_entries"
-      );
-      return res.status(200).json({ count: parseInt(result.rows[0].count) });
+      const sql = getDb();
+      const result = await sql`
+        SELECT COUNT(*) as count FROM waitlist_entries
+      `;
+      return res.status(200).json({ count: parseInt(result[0].count) });
     } catch (error) {
       console.error("Waitlist count error:", error);
       return res.status(500).json({ error: "Failed to get waitlist count" });

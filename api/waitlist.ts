@@ -1,5 +1,5 @@
 import type { VercelRequest, VercelResponse } from "@vercel/node";
-import { getPool } from "./_db";
+import { getDb } from "./_db";
 
 export default async function handler(
   req: VercelRequest,
@@ -27,28 +27,30 @@ export default async function handler(
       }
 
       const normalizedEmail = email.toLowerCase().trim();
-      const pool = getPool();
+      const sql = getDb();
 
-      const existing = await pool.query(
-        'SELECT id, email, created_at AS "createdAt" FROM waitlist_entries WHERE email = $1',
-        [normalizedEmail]
-      );
+      const existing = await sql`
+        SELECT id, email, created_at AS "createdAt"
+        FROM waitlist_entries
+        WHERE email = ${normalizedEmail}
+      `;
 
-      if (existing.rows.length > 0) {
+      if (existing.length > 0) {
         return res.status(200).json({
           message: "Already on waitlist",
-          entry: existing.rows[0],
+          entry: existing[0],
         });
       }
 
-      const result = await pool.query(
-        'INSERT INTO waitlist_entries (id, email, created_at) VALUES (gen_random_uuid(), $1, NOW()) RETURNING id, email, created_at AS "createdAt"',
-        [normalizedEmail]
-      );
+      const result = await sql`
+        INSERT INTO waitlist_entries (id, email, created_at)
+        VALUES (gen_random_uuid(), ${normalizedEmail}, NOW())
+        RETURNING id, email, created_at AS "createdAt"
+      `;
 
       return res.status(201).json({
         message: "Successfully added to waitlist",
-        entry: result.rows[0],
+        entry: result[0],
       });
     } catch (error) {
       console.error("Waitlist error:", error);

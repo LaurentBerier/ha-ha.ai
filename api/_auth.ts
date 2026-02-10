@@ -1,5 +1,5 @@
 import type { VercelRequest, VercelResponse } from "@vercel/node";
-const crypto = require("crypto");
+import { createHmac, timingSafeEqual } from "crypto";
 
 const TOKEN_EXPIRY_MS = 24 * 60 * 60 * 1000;
 
@@ -14,8 +14,7 @@ export function createAdminToken(): string {
     admin: true,
     exp: Date.now() + TOKEN_EXPIRY_MS,
   });
-  const hmac = crypto
-    .createHmac("sha256", getSecret())
+  const hmac = createHmac("sha256", getSecret())
     .update(payload)
     .digest("hex");
   const payloadEncoded = Buffer.from(payload).toString("base64url");
@@ -32,12 +31,11 @@ export function verifyAdminToken(token: string): boolean {
     if (!payloadB64 || !hmac) return false;
 
     const payload = Buffer.from(payloadB64, "base64url").toString("utf-8");
-    const expectedHmac = crypto
-      .createHmac("sha256", getSecret())
+    const expectedHmac = createHmac("sha256", getSecret())
       .update(payload)
       .digest("hex");
 
-    if (!crypto.timingSafeEqual(Buffer.from(hmac), Buffer.from(expectedHmac))) {
+    if (!timingSafeEqual(Buffer.from(hmac), Buffer.from(expectedHmac))) {
       return false;
     }
 

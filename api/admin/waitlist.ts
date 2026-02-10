@@ -1,6 +1,6 @@
 import type { VercelRequest, VercelResponse } from "@vercel/node";
 import { isAdmin } from "../_auth";
-import { getPool } from "../_db";
+import { getDb } from "../_db";
 
 export default async function handler(
   req: VercelRequest,
@@ -16,11 +16,13 @@ export default async function handler(
     }
 
     try {
-      const pool = getPool();
-      const result = await pool.query(
-        'SELECT id, email, created_at AS "createdAt" FROM waitlist_entries ORDER BY created_at DESC'
-      );
-      return res.json({ entries: result.rows });
+      const sql = getDb();
+      const result = await sql`
+        SELECT id, email, created_at AS "createdAt"
+        FROM waitlist_entries
+        ORDER BY created_at DESC
+      `;
+      return res.json({ entries: result });
     } catch (error) {
       console.error("Admin waitlist error:", error);
       return res.status(500).json({ error: "Failed to get waitlist" });
