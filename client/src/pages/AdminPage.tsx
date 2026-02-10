@@ -30,15 +30,16 @@ export default function AdminPage() {
         credentials: 'include',
       });
       if (!res.ok) {
-        setError('Mot de passe incorrect');
+        const data = await res.json().catch(() => null);
+        setError(data?.error === 'Invalid password' ? 'Mot de passe incorrect' : `Erreur: ${res.status}`);
         setLoading(false);
         return;
       }
       setPassword('');
       await fetchEntries();
       setAuthenticated(true);
-    } catch {
-      setError('Erreur de connexion');
+    } catch (err: any) {
+      setError(`Erreur de connexion: ${err?.message || 'inconnue'}`);
     }
     setLoading(false);
   };
