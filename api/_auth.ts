@@ -1,5 +1,5 @@
-import crypto from "crypto";
 import type { VercelRequest, VercelResponse } from "@vercel/node";
+const crypto = require("crypto");
 
 const TOKEN_EXPIRY_MS = 24 * 60 * 60 * 1000;
 

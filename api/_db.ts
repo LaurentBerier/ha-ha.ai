@@ -1,10 +1,8 @@
-import pg from "pg";
+const { Pool } = require("pg") as typeof import("pg");
 
-const { Pool } = pg;
+let pool: any;
 
-let pool: pg.Pool | null = null;
-
-export function getPool(): pg.Pool {
+export function getPool() {
   if (!pool) {
     const url = process.env.NEON_DATABASE_URL || process.env.DATABASE_URL;
     if (!url) {
