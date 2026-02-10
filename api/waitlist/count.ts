@@ -1,5 +1,4 @@
 import type { VercelRequest, VercelResponse } from "@vercel/node";
-import { getDb } from "../_db";
 
 export default async function handler(
   req: VercelRequest,
@@ -15,11 +14,12 @@ export default async function handler(
 
   if (req.method === "GET") {
     try {
-      const sql = getDb();
-      const result = await sql`
-        SELECT COUNT(*) as count FROM waitlist_entries
-      `;
-      return res.status(200).json({ count: parseInt(result[0].count) });
+      const { neon } = await import("@neondatabase/serverless");
+      const url = process.env.NEON_DATABASE_URL || process.env.DATABASE_URL;
+      if (!url) return res.status(500).json({ error: "Database not configured" });
+      const sql = neon(url);
+      const result = await sql`SELECT COUNT(*) as count FROM waitlist_entries`;
+      return res.status(200).json({ count: parseInt(result[0].count as string) });
     } catch (error) {
       console.error("Waitlist count error:", error);
       return res.status(500).json({ error: "Failed to get waitlist count" });

@@ -1,5 +1,4 @@
 import type { VercelRequest, VercelResponse } from "@vercel/node";
-import { getDb } from "./_db";
 
 export default async function handler(
   req: VercelRequest,
@@ -27,7 +26,10 @@ export default async function handler(
       }
 
       const normalizedEmail = email.toLowerCase().trim();
-      const sql = getDb();
+      const { neon } = await import("@neondatabase/serverless");
+      const url = process.env.NEON_DATABASE_URL || process.env.DATABASE_URL;
+      if (!url) return res.status(500).json({ error: "Database not configured" });
+      const sql = neon(url);
 
       const existing = await sql`
         SELECT id, email, created_at AS "createdAt"

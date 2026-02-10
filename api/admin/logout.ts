@@ -1,5 +1,6 @@
 import type { VercelRequest, VercelResponse } from "@vercel/node";
-import { clearAdminCookie } from "../_auth";
+
+const isProduction = process.env.NODE_ENV === "production" || process.env.VERCEL === "1";
 
 export default async function handler(
   req: VercelRequest,
@@ -10,7 +11,11 @@ export default async function handler(
   }
 
   if (req.method === "POST") {
-    clearAdminCookie(res);
+    const secure = isProduction ? "; Secure" : "";
+    res.setHeader(
+      "Set-Cookie",
+      `admin_token=; HttpOnly; SameSite=Lax; Path=/; Max-Age=0${secure}`
+    );
     return res.json({ success: true });
   }
 
