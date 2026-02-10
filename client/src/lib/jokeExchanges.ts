@@ -5,11 +5,11 @@ export interface JokeExchange {
 
 export const jokeExchangesFr: JokeExchange[] = [
   {
-      user: "slt cathy jtdore tro! tu me fai tro rire lol! g tro hate dte voir en show a mtl, c kan ta prochaine show stp??? rep stp",
-      cathy: "Apprends à écrire. Ça serait un bon début.",
+    user: "Hey cathy g tro hate dte voir en show a mtl, on prend une biaire après ??? rep stp",
+    cathy: "Apprends à écrire pis on verra.",
   },
   {
-    user: "pk tu guge tou?",
+    user: "pk tu me guge?",
     cathy: "Parce que tu écris comme si t’avais 9 ans.",
   },
   {
@@ -17,7 +17,7 @@ export const jokeExchangesFr: JokeExchange[] = [
     cathy: "Malheureusement, oui.",
   },
   {
-    user: "jsui pas bon en francais",
+    user: "jsu pa bon en fransais",
     cathy: "Ça paraît. À chaque mot.",
   },
   {
@@ -25,36 +25,48 @@ export const jokeExchangesFr: JokeExchange[] = [
     cathy: "Non. Mais ton français va encore moins bien.",
   },
   {
-    user: "Cathy, j'ai besoin d'un conseil de vie.",
-    cathy: "Ok, mais tu vas le regretter.",
+    user: "Fais-moi rire.",
+    cathy: "Oui, c’est ça le but.",
   },
   {
-    user: "Je me sens down aujourd'hui...",
-    cathy: "T'es tu regardé dans le miroir? C'est normal.",
+    user: "J'ai un plan génial.",
+    cathy: "Explique-le pas. Garde-le magique.",
   },
   {
     user: "Est-ce que je suis une bonne personne?",
-    cathy: "T'es correct. Mais ton linge, par exemple...",
+    cathy: "T'es correct mais t’as pas de jugement.",
   },
   {
     user: "Roaste-moi.",
-    cathy: "T'as pas besoin de moi pour ça. Tu te débrouilles très bien tout seul.",
+    cathy: "Tu te débrouilles très bien tout seul.",
   },
   {
     user: "Dis-moi quelque chose de gentil.",
-    cathy: "T'es persistant. C'est déjà ça.",
+    cathy: "Ben t’es persistant. C'est déjà ça.",
   },
   {
     user: "Qu'est-ce que tu penses de moi?",
-    cathy: "Je pense que tu poses trop de questions.",
+    cathy: "J’pense que tu poses trop de questions.",
   },
   {
     user: "J'ai besoin de motivation.",
     cathy: "Lève-toi. Bouge. C'est pas compliqué.",
   },
   {
-    user: "Fais-moi rire.",
-    cathy: "Regarde ton compte en banque. Voilà.",
+    user: "Cathy, j'ai besoin d'un conseil de vie.",
+    cathy: "Ouin… tu risque de le regretter. T’es en mode roast.",
+  },
+  {
+    user: "Je pense trop.",
+    cathy: "On dirait pas.",
+  },
+  {
+    user: "Je me sens down aujourd'hui...",
+    cathy: "Normal, ça fait mille ans qu’on a pas vu le soleil.",
+  },
+  {
+    user: "J’sais pas quoi faire.",
+    cathy: "Viens voir mon show. J’peux t’acheter des billets… Avec tes cartes.",
   },
   {
     user: "J'ai peur de vieillir.",
@@ -70,19 +82,15 @@ export const jokeExchangesFr: JokeExchange[] = [
   },
   {
     user: "J'ai fait un choix discutable.",
-    cathy: "Encore? Tu collectionnes ça.",
+    cathy: "Encore? Tu collectionnes ça. Bon raconte-moi ça.",
   },
   {
     user: "Je veux être heureux.",
-    cathy: "Commence par baisser tes attentes.",
+    cathy: "Commence par baisser tes attentes pis sort dehors.",
   },
   {
     user: "Pourquoi personne ne me comprend?",
-    cathy: "Parce que t'expliques mal.",
-  },
-  {
-    user: "Je pense trop.",
-    cathy: "On dirait pas.",
+    cathy: "Peut-être que t'expliques mal.",
   },
   {
     user: "Dis-moi la vérité.",
@@ -97,12 +105,8 @@ export const jokeExchangesFr: JokeExchange[] = [
     cathy: "Parfait. Ça te garde alerte pour rien.",
   },
   {
-    user: "J'ai un plan génial.",
-    cathy: "Explique-le pas. Garde-le magique.",
-  },
-  {
     user: "Tu penses quoi de l'amour?",
-    cathy: "C'est beau. Jusqu'à ce que tu parles.",
+    cathy: "C'est beau, c’est l’fun pis des fois ça fait mal",
   },
   {
     user: "J'ai fait de mon mieux.",
@@ -110,7 +114,7 @@ export const jokeExchangesFr: JokeExchange[] = [
   },
   {
     user: "Je suis perdu.",
-    cathy: "T'es au bon endroit alors.",
+    cathy: "Moi j’pense que t’es à la bonne place mais si tu veux, je te set le GPS",
   },
   {
     user: "Je devrais changer?",
@@ -118,8 +122,9 @@ export const jokeExchangesFr: JokeExchange[] = [
   },
   {
     user: "J'ai une grande annonce.",
-    cathy: "Respire. C'est sûrement pas ça.",
+    cathy: "Respire. Fais pas ça",
   },
+
 ];
 
 export const jokeExchangesEn: JokeExchange[] = [
