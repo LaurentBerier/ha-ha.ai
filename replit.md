@@ -1,92 +1,86 @@
-# Ha-Ha.ai Landing Page
+# Ha-Ha.ai Website Notes
 
-## Overview
-A stunning single-page bilingual landing page for Ha-Ha.ai, a Quebec-based comic voice and text chatbot that imitates real stand-up comedians. The first featured comedian is Cathy Gauthier.
+## Current Status (March 2026)
 
-## Product Definition
-- **What it is**: A comic chatbot that talks, reacts, and roasts users using humor, tone, and timing inspired by real humorists
-- **Target audience**: Fans of comedy, stand-up, and Quebec humor. Fans of Cathy Gauthier specifically.
-- **Tone**: Funny, sharp, confident, slightly irreverent. Comedy first, AI second.
+This repository now uses **Supabase** as the single backend for:
 
-## Tech Stack
-- **Frontend**: React + TypeScript + Tailwind CSS
-- **Backend**: Express.js with in-memory storage
-- **Build**: Vite
-- **Forms**: React Hook Form + Zod validation
-- **State**: TanStack Query
+- user authentication (email/password + Apple OAuth)
+- onboarding profile storage (`profiles`)
+- waitlist storage (`waitlist_entries`)
 
-## Project Structure
-```
-client/
-├── src/
-│   ├── components/
-│   │   ├── ui/                    # Shadcn components
-│   │   ├── AnimatedBackground.tsx
-│   │   ├── Header.tsx
-│   │   ├── HeroSection.tsx        # Hero with waitlist CTA
-│   │   ├── WhatItIsSection.tsx    # Product explanation
-│   │   ├── WhatYouCanDoSection.tsx # 3 playful examples
-│   │   ├── PersonalitySection.tsx  # Cathy Gauthier feature
-│   │   ├── ChatSimulation.tsx    # Interactive chat demo with typing animation
-│   │   ├── GoldOrb.tsx           # Animated gold orb (canvas-based, mobile-optimized)
-│   │   ├── WaitlistSection.tsx
-│   │   └── Footer.tsx            # With "more comedians" teaser
-│   ├── lib/
-│   │   ├── i18n.ts               # Translations (FR/EN)
-│   │   ├── jokeExchanges.ts      # FR/EN joke pairs for chat simulation
-│   │   └── queryClient.ts
-│   ├── pages/
-│   │   └── LandingPage.tsx
-│   └── index.css                 # Dark theme design tokens
-server/
-├── routes.ts                     # API endpoints
-├── storage.ts                    # In-memory storage
-└── index.ts                      # Express server
-shared/
-└── schema.ts                     # Zod schemas & types
-```
+Legacy Neon/Drizzle files were removed.
 
-## Key Features
-1. **Bilingual Support**: French (default) and English via header toggle
-2. **Dark Theme**: Black background with red/blue accent colors
-3. **Interactive Chat Demo**: Gold orb + typing animation showing random joke exchanges
-4. **Email Waitlist**: Prominent CTA with comedy-first copy
-5. **Responsive Design**: Mobile-first, phone mockup scales 340px-480px
+## App Routes
 
-## Page Sections
-1. **Hero**: Headline + waitlist CTA + phone with animated orb
-2. **What It Is**: One paragraph explaining the product
-3. **What You Can Do**: 3 playful examples with attitude
-4. **Personality**: Cathy Gauthier feature
-5. **Waitlist**: Email signup form
-6. **Footer**: "More comedians coming soon" teaser
+Public:
 
-## API Endpoints
-- `POST /api/waitlist` - Submit email to waitlist
-- `GET /api/waitlist/count` - Get current waitlist count
+- `/` landing page
+- `/login`
+- `/signup`
+- `/auth/callback`
 
-## Color Scheme
-- Background: Near black (#0a0a0a)
-- Primary: Red (hsl 0 72% 51%)
-- Secondary: Blue (hsl 220 70% 50%)
-- Gold orb: Orange/gold tones (#f97316, #fb923c)
+Protected:
 
-## Running the Project
+- `/onboarding` (requires authenticated session)
+- `/app` (requires authenticated session + onboarding complete/skip)
+
+Admin:
+
+- `/admin` (session-password gated page for waitlist export)
+
+## Supabase Requirements
+
+Run SQL bootstrap once in Supabase:
+
+- `docs/supabase-setup.sql`
+
+This creates:
+
+- `public.profiles` + signup trigger
+- `public.waitlist_entries`
+- RLS policies for profile and waitlist
+
+## Environment Variables
+
+Client (Vite):
+
+- `VITE_SUPABASE_URL`
+- `VITE_SUPABASE_ANON_KEY`
+
+Server / API:
+
+- `SUPABASE_URL`
+- `SUPABASE_ANON_KEY`
+- `SUPABASE_SERVICE_ROLE_KEY`
+- `SESSION_SECRET`
+- `ADMIN_PASSWORD`
+
+See `.env.example`.
+
+## Local Development
+
 ```bash
+npm install
 npm run dev
 ```
-Server starts on port 5000, serving both API and frontend.
 
-## Recent Changes
-- January 2026: Interactive chat simulation in hero
-  - New ChatSimulation component with typing animation
-  - Gold orb that scales when "talking"
-  - 8 random FR/EN joke exchanges (jokeExchanges.ts)
-  - Same exchange persists across language toggle
-  - Mobile performance: 30fps, fewer particles on small screens
-  
-- January 2026: Content rewrite for comedy-first tone
-  - New hero with prominent waitlist CTA
-  - "What it is" and "What you can do" sections added
-  - Removed corporate sections (Features, WhyItWorks)
-  - Footer teaser about more comedians
+If port `5000` is already used:
+
+```bash
+PORT=5050 npm run dev
+```
+
+## Validation
+
+```bash
+npm run check
+npm run build
+```
+
+Manual flow:
+
+1. `GET /login` and `GET /signup` load.
+2. Sign up user, confirm via email callback.
+3. User is redirected to onboarding.
+4. Complete or skip onboarding and land on `/app`.
+5. Waitlist submit works on landing page.
