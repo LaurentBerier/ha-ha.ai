@@ -2,7 +2,7 @@ import { FormEvent, useEffect, useState } from "react";
 import { Link, useLocation } from "wouter";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { supabase } from "@/lib/supabaseClient";
+import { isSupabaseConfigured, supabase, supabaseConfigError } from "@/lib/supabaseClient";
 import { useAuth } from "@/context/AuthContext";
 
 export default function LoginPage() {
@@ -21,6 +21,10 @@ export default function LoginPage() {
 
   const onSubmit = async (event: FormEvent) => {
     event.preventDefault();
+    if (!isSupabaseConfigured) {
+      setErrorMessage(supabaseConfigError);
+      return;
+    }
     setIsSubmitting(true);
     setErrorMessage(null);
     try {
@@ -38,6 +42,10 @@ export default function LoginPage() {
   };
 
   const onApple = async () => {
+    if (!isSupabaseConfigured) {
+      setErrorMessage(supabaseConfigError);
+      return;
+    }
     setErrorMessage(null);
     const redirectTo = `${window.location.origin}/auth/callback`;
     const { error } = await supabase.auth.signInWithOAuth({

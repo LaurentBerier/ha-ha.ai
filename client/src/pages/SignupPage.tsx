@@ -2,7 +2,7 @@ import { FormEvent, useState } from "react";
 import { Link } from "wouter";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { supabase } from "@/lib/supabaseClient";
+import { isSupabaseConfigured, supabase, supabaseConfigError } from "@/lib/supabaseClient";
 
 export default function SignupPage() {
   const [email, setEmail] = useState("");
@@ -14,6 +14,10 @@ export default function SignupPage() {
 
   const onSubmit = async (event: FormEvent) => {
     event.preventDefault();
+    if (!isSupabaseConfigured) {
+      setErrorMessage(supabaseConfigError);
+      return;
+    }
     if (password !== confirmPassword) {
       setErrorMessage("Les mots de passe ne correspondent pas.");
       return;
@@ -46,6 +50,10 @@ export default function SignupPage() {
   };
 
   const onApple = async () => {
+    if (!isSupabaseConfigured) {
+      setErrorMessage(supabaseConfigError);
+      return;
+    }
     setErrorMessage(null);
     const redirectTo = `${window.location.origin}/auth/callback`;
     const { error } = await supabase.auth.signInWithOAuth({

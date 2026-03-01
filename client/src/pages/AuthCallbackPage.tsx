@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useLocation } from "wouter";
-import { supabase } from "@/lib/supabaseClient";
+import { isSupabaseConfigured, supabase, supabaseConfigError } from "@/lib/supabaseClient";
 
 export default function AuthCallbackPage() {
   const [, setLocation] = useLocation();
@@ -10,6 +10,13 @@ export default function AuthCallbackPage() {
     let mounted = true;
 
     const resolve = async () => {
+      if (!isSupabaseConfigured) {
+        if (mounted) {
+          setErrorMessage(supabaseConfigError);
+        }
+        return;
+      }
+
       const currentUrl = window.location.href;
       if (currentUrl.includes("code=")) {
         const { error } = await supabase.auth.exchangeCodeForSession(currentUrl);
