@@ -1,6 +1,7 @@
 import { type Language, copy } from '@/lib/i18n';
 import { Button } from '@/components/ui/button';
 import { ArrowRight } from 'lucide-react';
+import { Link } from 'wouter';
 import { ChatSimulation } from './ChatSimulation';
 
 interface HeroSectionProps {
@@ -9,13 +10,6 @@ interface HeroSectionProps {
 
 export function HeroSection({ language }: HeroSectionProps) {
   const t = copy[language].hero;
-
-  const scrollToWaitlist = () => {
-    const element = document.getElementById('waitlist');
-    if (element) {
-      element.scrollIntoView({ behavior: 'smooth' });
-    }
-  };
 
   return (
     <section className="relative min-h-screen flex items-center justify-center pt-16 pb-8 overflow-hidden">
@@ -49,13 +43,15 @@ export function HeroSection({ language }: HeroSectionProps) {
                 {t.waitlistDescription}
               </p>
               <Button
+                asChild
                 size="lg"
-                onClick={scrollToWaitlist}
                 className="w-full sm:w-auto"
                 data-testid="button-hero-cta-primary"
               >
-                {t.ctaPrimary}
-                <ArrowRight className="w-4 h-4 ml-2" />
+                <Link href="/signup">
+                  {t.ctaPrimary}
+                  <ArrowRight className="w-4 h-4 ml-2" />
+                </Link>
               </Button>
             </div>
           </div>
