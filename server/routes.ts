@@ -1,7 +1,7 @@
 import type { Express } from "express";
 import { createServer, type Server } from "http";
-import { storage } from "./storage";
 import { insertWaitlistSchema } from "@shared/schema";
+import { supabaseAdmin } from "./supabaseAdmin";
 
 function requireAdmin(req: any, res: any, next: any) {
   if (req.session?.isAdmin) {
@@ -36,7 +36,21 @@ export async function registerRoutes(
 
   app.get("/api/admin/waitlist", requireAdmin, async (_req, res) => {
     try {
-      const entries = await storage.getWaitlistEntries();
+      const { data, error } = await supabaseAdmin
+        .from("waitlist_entries")
+        .select("id,email,created_at")
+        .order("created_at", { ascending: false });
+
+      if (error) {
+        return res.status(500).json({ error: error.message });
+      }
+
+      const entries = (data ?? []).map((entry) => ({
+        id: entry.id,
+        email: entry.email,
+        createdAt: entry.created_at,
+      }));
+
       return res.json({ entries });
     } catch (error) {
       return res.status(500).json({ error: "Failed to get waitlist" });
@@ -54,18 +68,44 @@ export async function registerRoutes(
         });
       }
 
-      const existingEntry = await storage.getWaitlistEntryByEmail(result.data.email);
+      const { data: existingEntry, error: existingError } = await supabaseAdmin
+        .from("waitlist_entries")
+        .select("id,email,created_at")
+        .eq("email", result.data.email)
+        .maybeSingle();
+
+      if (existingError) {
+        return res.status(500).json({ error: existingError.message });
+      }
+
       if (existingEntry) {
         return res.status(200).json({ 
           message: "Already on waitlist",
-          entry: existingEntry 
+          entry: {
+            id: existingEntry.id,
+            email: existingEntry.email,
+            createdAt: existingEntry.created_at,
+          }
         });
       }
 
-      const entry = await storage.createWaitlistEntry(result.data);
+      const { data: entry, error: insertError } = await supabaseAdmin
+        .from("waitlist_entries")
+        .insert({ email: result.data.email })
+        .select("id,email,created_at")
+        .single();
+
+      if (insertError || !entry) {
+        return res.status(500).json({ error: insertError?.message ?? "Failed to join waitlist" });
+      }
+
       return res.status(201).json({ 
         message: "Successfully added to waitlist",
-        entry 
+        entry: {
+          id: entry.id,
+          email: entry.email,
+          createdAt: entry.created_at,
+        }
       });
     } catch (error) {
       console.error("Waitlist error:", error);
@@ -75,8 +115,15 @@ export async function registerRoutes(
 
   app.get("/api/waitlist/count", async (_req, res) => {
     try {
-      const entries = await storage.getWaitlistEntries();
-      return res.json({ count: entries.length });
+      const { count, error } = await supabaseAdmin
+        .from("waitlist_entries")
+        .select("id", { count: "exact", head: true });
+
+      if (error) {
+        return res.status(500).json({ error: error.message });
+      }
+
+      return res.json({ count: count ?? 0 });
     } catch (error) {
       console.error("Waitlist count error:", error);
       return res.status(500).json({ error: "Failed to get waitlist count" });

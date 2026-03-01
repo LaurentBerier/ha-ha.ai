@@ -1,4 +1,5 @@
 import type { VercelRequest, VercelResponse } from "@vercel/node";
+import { getSupabaseAdmin } from "./_supabase";
 
 export default async function handler(
   req: VercelRequest,
@@ -26,33 +27,46 @@ export default async function handler(
       }
 
       const normalizedEmail = email.toLowerCase().trim();
-      const { neon } = await import("@neondatabase/serverless");
-      const url = process.env.NEON_DATABASE_URL || process.env.DATABASE_URL;
-      if (!url) return res.status(500).json({ error: "Database not configured" });
-      const sql = neon(url);
+      const supabaseAdmin = getSupabaseAdmin();
 
-      const existing = await sql`
-        SELECT id, email, created_at AS "createdAt"
-        FROM waitlist_entries
-        WHERE email = ${normalizedEmail}
-      `;
+      const { data: existing, error: existingError } = await supabaseAdmin
+        .from("waitlist_entries")
+        .select("id,email,created_at")
+        .eq("email", normalizedEmail)
+        .maybeSingle();
 
-      if (existing.length > 0) {
+      if (existingError) {
+        return res.status(500).json({ error: existingError.message });
+      }
+
+      if (existing) {
         return res.status(200).json({
           message: "Already on waitlist",
-          entry: existing[0],
+          entry: {
+            id: existing.id,
+            email: existing.email,
+            createdAt: existing.created_at,
+          },
         });
       }
 
-      const result = await sql`
-        INSERT INTO waitlist_entries (id, email, created_at)
-        VALUES (gen_random_uuid(), ${normalizedEmail}, NOW())
-        RETURNING id, email, created_at AS "createdAt"
-      `;
+      const { data: result, error: insertError } = await supabaseAdmin
+        .from("waitlist_entries")
+        .insert({ email: normalizedEmail })
+        .select("id,email,created_at")
+        .single();
+
+      if (insertError || !result) {
+        return res.status(500).json({ error: insertError?.message ?? "Failed to join waitlist" });
+      }
 
       return res.status(201).json({
         message: "Successfully added to waitlist",
-        entry: result[0],
+        entry: {
+          id: result.id,
+          email: result.email,
+          createdAt: result.created_at,
+        },
       });
     } catch (error) {
       console.error("Waitlist error:", error);

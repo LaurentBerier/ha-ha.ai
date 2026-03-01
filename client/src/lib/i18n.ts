@@ -56,6 +56,33 @@ export const copy = {
       description: 'Authentique. Sans filtre. Drôle même quand elle te dit non. Son énergie fait qu\'on a envie de l\'entendre, même pour demander la météo.',
       traits: ['Authentique', 'Sans filtre', 'Drôle', 'Spontanée'],
     },
+    features: {
+      title: 'Fonctionnalités',
+      items: [
+        { title: 'Voix naturelle', description: 'Discute avec une voix comique qui réagit en temps réel.' },
+        { title: 'Roasts sur mesure', description: 'Des réponses humoristiques adaptées à ta conversation.' },
+        { title: 'Contexte utilisateur', description: 'Une personnalité qui apprend ton ton et tes préférences.' },
+        { title: 'Toujours disponible', description: 'Accès rapide 24/7 sur mobile et web.' },
+      ],
+    },
+    examples: {
+      title: 'Exemples de modes',
+      items: [
+        { title: 'Mode Roast', description: 'Cathy te répond sans filtre, avec punchlines.' },
+        { title: 'Mode Motivation', description: 'Du coaching brutalement honnête pour te relancer.' },
+        { title: 'Mode GPS sarcastique', description: 'Des directions avec commentaires piquants.' },
+        { title: 'Mode Discussion', description: 'Conversation libre, humour et répartie.' },
+      ],
+    },
+    whyItWorks: {
+      title: 'Pourquoi ça marche',
+      items: [
+        { title: 'Personnalité forte', description: 'Une voix claire, cohérente et mémorable.' },
+        { title: 'Empathie + humour', description: 'Des réponses drôles mais adaptées à ton contexte.' },
+        { title: 'Réactivité', description: 'Des réponses rapides en voix et en texte.' },
+        { title: 'Communauté', description: 'Le produit évolue avec les retours des utilisateurs.' },
+      ],
+    },
     cta: {
       title: 'Fais partie des premiers.',
       description: 'Teste le chatbot en avant-première et aide-nous à bâtir quelque chose de drôle.',
@@ -124,6 +151,33 @@ export const copy = {
       subtitle: 'The first voice of Ha-Ha.ai',
       description: 'Authentic. Unfiltered. Funny even when she says no. Her energy makes you want to hear her, even just to ask about the weather.',
       traits: ['Authentic', 'Unfiltered', 'Funny', 'Spontaneous'],
+    },
+    features: {
+      title: 'Features',
+      items: [
+        { title: 'Natural voice', description: 'Talk to a comedic voice that reacts in real time.' },
+        { title: 'Personalized roasts', description: 'Humorous replies adapted to your conversation.' },
+        { title: 'User context', description: 'A personality that adapts to your tone and preferences.' },
+        { title: 'Always available', description: 'Fast access 24/7 on mobile and web.' },
+      ],
+    },
+    examples: {
+      title: 'Mode examples',
+      items: [
+        { title: 'Roast mode', description: 'Cathy responds with unfiltered punchlines.' },
+        { title: 'Motivation mode', description: 'Brutally honest coaching to get you moving.' },
+        { title: 'Sarcastic GPS mode', description: 'Directions with biting commentary.' },
+        { title: 'Discussion mode', description: 'Free-form chat with humor and attitude.' },
+      ],
+    },
+    whyItWorks: {
+      title: 'Why it works',
+      items: [
+        { title: 'Strong personality', description: 'A clear, consistent, memorable voice.' },
+        { title: 'Empathy + humor', description: 'Funny answers tuned to your context.' },
+        { title: 'Fast response', description: 'Quick replies across voice and text.' },
+        { title: 'Community-driven', description: 'The product evolves through user feedback.' },
+      ],
     },
     cta: {
       title: 'Be among the first.',

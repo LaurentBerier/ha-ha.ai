@@ -1,5 +1,6 @@
 import type { VercelRequest, VercelResponse } from "@vercel/node";
 import { createHmac, timingSafeEqual } from "crypto";
+import { getSupabaseAdmin } from "../_supabase";
 
 function getSecret(): string {
   const secret = process.env.SESSION_SECRET;
@@ -47,16 +48,23 @@ export default async function handler(
     }
 
     try {
-      const { neon } = await import("@neondatabase/serverless");
-      const url = process.env.NEON_DATABASE_URL || process.env.DATABASE_URL;
-      if (!url) return res.status(500).json({ error: "Database not configured" });
-      const sql = neon(url);
-      const result = await sql`
-        SELECT id, email, created_at AS "createdAt"
-        FROM waitlist_entries
-        ORDER BY created_at DESC
-      `;
-      return res.json({ entries: result });
+      const supabaseAdmin = getSupabaseAdmin();
+      const { data, error } = await supabaseAdmin
+        .from("waitlist_entries")
+        .select("id,email,created_at")
+        .order("created_at", { ascending: false });
+
+      if (error) {
+        return res.status(500).json({ error: error.message });
+      }
+
+      const entries = (data ?? []).map((entry) => ({
+        id: entry.id,
+        email: entry.email,
+        createdAt: entry.created_at,
+      }));
+
+      return res.json({ entries });
     } catch (error) {
       console.error("Admin waitlist error:", error);
       return res.status(500).json({ error: "Failed to get waitlist" });
