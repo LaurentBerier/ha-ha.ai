@@ -7,7 +7,7 @@ import { Footer } from '@/components/Footer';
 const WhatItIsSection = lazy(() => import('@/components/WhatItIsSection').then(m => ({ default: m.WhatItIsSection })));
 const WhatYouCanDoSection = lazy(() => import('@/components/WhatYouCanDoSection').then(m => ({ default: m.WhatYouCanDoSection })));
 const PersonalitySection = lazy(() => import('@/components/PersonalitySection').then(m => ({ default: m.PersonalitySection })));
-const WaitlistSection = lazy(() => import('@/components/WaitlistSection').then(m => ({ default: m.WaitlistSection })));
+const SignupSection = lazy(() => import('@/components/SignupSection').then(m => ({ default: m.SignupSection })));
 
 const isMobile = typeof window !== 'undefined' && window.innerWidth < 768;
 const AnimatedBackground = lazy(() => import('@/components/AnimatedBackground').then(m => ({ default: m.AnimatedBackground })));
@@ -30,7 +30,7 @@ export default function LandingPage() {
           <PersonalitySection language={language} />
           <WhatItIsSection language={language} />
           <WhatYouCanDoSection language={language} />
-          <WaitlistSection language={language} />
+          <SignupSection language={language} />
         </Suspense>
       </main>
 

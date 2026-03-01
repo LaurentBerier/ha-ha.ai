@@ -36,10 +36,10 @@ export function HeroSection({ language }: HeroSectionProps) {
             </p>
 
             <div className="bg-card/30 backdrop-blur-sm border border-border/50 rounded-2xl p-6 sm:p-8 mb-8 max-w-lg mx-auto lg:mx-0">
-              <h3 className="text-xl sm:text-2xl font-bold mb-2" data-testid="text-waitlist-headline">
+              <h3 className="text-xl sm:text-2xl font-bold mb-2" data-testid="text-signup-headline">
                 {t.waitlistHeadline}
               </h3>
-              <p className="text-sm sm:text-base text-muted-foreground mb-6" data-testid="text-waitlist-description">
+              <p className="text-sm sm:text-base text-muted-foreground mb-6" data-testid="text-signup-description">
                 {t.waitlistDescription}
               </p>
               <Button

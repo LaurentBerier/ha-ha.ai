@@ -4,15 +4,15 @@ import { ArrowRight } from 'lucide-react';
 import { Link } from 'wouter';
 import stageImage from '@assets/image_1769047346055.png';
 
-interface WaitlistSectionProps {
+interface SignupSectionProps {
   language: Language;
 }
 
-export function WaitlistSection({ language }: WaitlistSectionProps) {
+export function SignupSection({ language }: SignupSectionProps) {
   const t = copy[language].cta;
 
   return (
-    <section id="waitlist" className="py-12 sm:py-16 relative overflow-hidden">
+    <section id="signup" className="py-12 sm:py-16 relative overflow-hidden">
       <div 
         className="absolute inset-0 opacity-20"
         style={{
