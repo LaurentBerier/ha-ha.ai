@@ -17,20 +17,58 @@ export default function AuthCallbackPage() {
         return;
       }
 
-      const currentUrl = window.location.href;
-      if (currentUrl.includes("code=")) {
-        const { error } = await supabase.auth.exchangeCodeForSession(currentUrl);
+      const url = new URL(window.location.href);
+      const hashParams = new URLSearchParams(url.hash.replace(/^#/, ""));
+      const code = url.searchParams.get("code");
+      const tokenHash = url.searchParams.get("token_hash") ?? hashParams.get("token_hash");
+      const otpTypeRaw = url.searchParams.get("type") ?? hashParams.get("type");
+
+      const tryVerifyOtpFallback = async () => {
+        if (!tokenHash || !otpTypeRaw) {
+          return false;
+        }
+
+        const { error } = await supabase.auth.verifyOtp({
+          token_hash: tokenHash,
+          type: otpTypeRaw as "signup" | "email" | "recovery" | "invite" | "magiclink" | "email_change",
+        });
+
         if (error) {
           if (mounted) {
-            const rawMessage = error.message ?? "Erreur de validation.";
-            if (rawMessage.toLowerCase().includes("code verifier")) {
-              setErrorMessage(
-                "Lien de confirmation ouvert sur un autre domaine/appareil. Rouvre le lien dans le même navigateur et le même domaine (www ou non-www) que lors de l'inscription."
-              );
-            } else {
+            setErrorMessage(error.message ?? "Erreur de validation.");
+          }
+          return false;
+        }
+
+        return true;
+      };
+
+      if (code) {
+        const { error } = await supabase.auth.exchangeCodeForSession(window.location.href);
+        if (error) {
+          const rawMessage = error.message ?? "Erreur de validation.";
+          const isMissingVerifier = rawMessage.toLowerCase().includes("code verifier");
+
+          if (isMissingVerifier) {
+            const verified = await tryVerifyOtpFallback();
+            if (!verified) {
+              if (mounted) {
+                setErrorMessage(
+                  "Lien de confirmation ouvert sur un autre domaine/appareil. Rouvre le lien dans le même navigateur et le même domaine (www ou non-www) que lors de l'inscription."
+                );
+              }
+              return;
+            }
+          } else {
+            if (mounted) {
               setErrorMessage(rawMessage);
             }
+            return;
           }
+        }
+      } else if (tokenHash && otpTypeRaw) {
+        const verified = await tryVerifyOtpFallback();
+        if (!verified) {
           return;
         }
       }
