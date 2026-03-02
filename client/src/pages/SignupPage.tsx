@@ -2,6 +2,7 @@ import { FormEvent, useState } from "react";
 import { Link } from "wouter";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { getAuthCallbackUrl } from "@/lib/authRedirect";
 import { isSupabaseConfigured, supabase, supabaseConfigError } from "@/lib/supabaseClient";
 
 export default function SignupPage() {
@@ -27,7 +28,7 @@ export default function SignupPage() {
     setErrorMessage(null);
     setSuccessMessage(null);
     try {
-      const redirectTo = `${window.location.origin}/auth/callback`;
+      const redirectTo = getAuthCallbackUrl();
       const { error } = await supabase.auth.signUp({
         email,
         password,
@@ -55,7 +56,7 @@ export default function SignupPage() {
       return;
     }
     setErrorMessage(null);
-    const redirectTo = `${window.location.origin}/auth/callback`;
+    const redirectTo = getAuthCallbackUrl();
     const { error } = await supabase.auth.signInWithOAuth({
       provider: "apple",
       options: { redirectTo },

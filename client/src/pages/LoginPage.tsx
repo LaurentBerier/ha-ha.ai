@@ -2,6 +2,7 @@ import { FormEvent, useEffect, useState } from "react";
 import { Link, useLocation } from "wouter";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { getAuthCallbackUrl } from "@/lib/authRedirect";
 import { isSupabaseConfigured, supabase, supabaseConfigError } from "@/lib/supabaseClient";
 import { useAuth } from "@/context/AuthContext";
 
@@ -47,7 +48,7 @@ export default function LoginPage() {
       return;
     }
     setErrorMessage(null);
-    const redirectTo = `${window.location.origin}/auth/callback`;
+    const redirectTo = getAuthCallbackUrl();
     const { error } = await supabase.auth.signInWithOAuth({
       provider: "apple",
       options: {

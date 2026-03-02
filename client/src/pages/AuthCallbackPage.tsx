@@ -22,7 +22,14 @@ export default function AuthCallbackPage() {
         const { error } = await supabase.auth.exchangeCodeForSession(currentUrl);
         if (error) {
           if (mounted) {
-            setErrorMessage(error.message);
+            const rawMessage = error.message ?? "Erreur de validation.";
+            if (rawMessage.toLowerCase().includes("code verifier")) {
+              setErrorMessage(
+                "Lien de confirmation ouvert sur un autre domaine/appareil. Rouvre le lien dans le même navigateur et le même domaine (www ou non-www) que lors de l'inscription."
+              );
+            } else {
+              setErrorMessage(rawMessage);
+            }
           }
           return;
         }
