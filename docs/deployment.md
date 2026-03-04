@@ -23,12 +23,33 @@ Set these in Vercel project settings:
 In Supabase Auth URL configuration:
 
 - Site URL: `https://www.ha-ha.ai`
-- Redirect URL: `https://www.ha-ha.ai/auth/callback`
+- Redirect URLs:
+  - `https://www.ha-ha.ai/auth/callback`
+  - `https://ha-ha.ai/auth/callback`
+  - `hahaha://auth/callback` (mobile app deep link)
+
+Password recovery:
+
+- web flow should use `https://www.ha-ha.ai/auth/callback?flow=recovery`
+- mobile flow should use `hahaha://auth/callback?flow=recovery`
 
 If Apple sign-in is enabled:
 
 - configure Apple provider credentials in Supabase
 - include the same callback domain
+
+## SMTP / Branded Emails (Resend)
+
+If using branded sender (`info@ha-ha.ai`):
+
+1. Verify domain DNS in Resend.
+2. Configure Supabase custom SMTP:
+   - host `smtp.resend.com`
+   - port `465`
+   - username `resend`
+   - password `<resend-api-key>`
+   - sender email `info@ha-ha.ai`
+3. Keep `{{ .ConfirmationURL }}` in Supabase email templates.
 
 ## Deployment Checklist
 

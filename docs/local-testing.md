@@ -36,6 +36,8 @@ Open:
 
 - `/login`
 - `/signup`
+- `/forgot-password`
+- `/reset-password`
 - `/auth/callback`
 - `/onboarding`
 - `/app`
@@ -45,6 +47,7 @@ Expected:
 - unauthenticated users are redirected away from protected routes
 - authenticated users without onboarding are forced to onboarding
 - after onboarding complete/skip, `/app` is accessible
+- recovery callback (`/auth/callback?flow=recovery`) routes to `/reset-password`
 
 ## 5) Common failures
 
@@ -53,4 +56,6 @@ Expected:
 - `Could not find table 'public.waitlist_entries'`
   - Run `docs/supabase-setup.sql` in Supabase.
 - Callback returns with no session
-  - Check Supabase Auth URL config and redirect URL includes `/auth/callback`.
+  - Check Supabase Auth URL config and redirect URLs include both `www` and non-`www` callback domains.
+- PKCE code verifier missing
+  - Open the email link in the same browser and same domain (`www` vs non-`www`) used during signup.
