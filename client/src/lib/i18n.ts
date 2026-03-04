@@ -6,6 +6,8 @@ export const copy = {
       logo: 'Ha-Ha.ai',
       features: 'Ce que tu peux faire',
       contact: 'Contact',
+      openApp: "Ouvrir l'app",
+      continueOnboarding: "Continuer l'onboarding",
     },
     hero: {
       headline: 'Cathy Gauthier, dans ta poche.',
@@ -103,6 +105,8 @@ export const copy = {
       logo: 'Ha-Ha.ai',
       features: 'What you can do',
       contact: 'Contact',
+      openApp: 'Open app',
+      continueOnboarding: 'Continue onboarding',
     },
     hero: {
       headline: 'Cathy Gauthier, in your pocket.',

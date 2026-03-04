@@ -1,5 +1,7 @@
 import { type Language, copy } from '@/lib/i18n';
 import { Button } from '@/components/ui/button';
+import { useAuth } from '@/context/AuthContext';
+import { Link } from 'wouter';
 import logoImage from '@assets/image_1769047272252.png';
 
 interface HeaderProps {
@@ -9,6 +11,11 @@ interface HeaderProps {
 
 export function Header({ language, onLanguageChange }: HeaderProps) {
   const t = copy[language];
+  const { session, userProfile, loading, profileLoading } = useAuth();
+  const onboardingDone = userProfile?.onboardingCompleted || userProfile?.onboardingSkipped;
+  const appHref = onboardingDone ? '/app' : '/onboarding';
+  const appLabel = onboardingDone ? t.nav.openApp : t.nav.continueOnboarding;
+  const showAppAccess = !loading && !profileLoading && Boolean(session);
 
   return (
     <header className="fixed top-0 left-0 right-0 z-50 bg-background/80 backdrop-blur-md border-b border-border/50">
@@ -26,6 +33,12 @@ export function Header({ language, onLanguageChange }: HeaderProps) {
           </div>
 
           <div className="flex items-center gap-2">
+            {showAppAccess ? (
+              <Button asChild variant="outline" size="sm" data-testid="button-open-app">
+                <Link href={appHref}>{appLabel}</Link>
+              </Button>
+            ) : null}
+
             <div className="flex items-center bg-muted rounded-md p-0.5">
               <Button
                 variant={language === 'fr' ? 'default' : 'ghost'}
