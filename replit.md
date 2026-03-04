@@ -17,6 +17,8 @@ Public:
 - `/` landing page
 - `/login`
 - `/signup`
+- `/forgot-password`
+- `/reset-password`
 - `/auth/callback`
 
 Protected:
@@ -81,6 +83,6 @@ Manual flow:
 
 1. `GET /login` and `GET /signup` load.
 2. Sign up user, confirm via email callback.
-3. User is redirected to onboarding.
-4. Complete or skip onboarding and land on `/app`.
-5. Waitlist submit works on landing page.
+3. Trigger password recovery from `/forgot-password` and complete reset on `/reset-password`.
+4. User is redirected to onboarding after confirmed signup.
+5. Complete or skip onboarding and land on `/app`.
