@@ -22,6 +22,7 @@ export default function AuthCallbackPage() {
       const code = url.searchParams.get("code");
       const tokenHash = url.searchParams.get("token_hash") ?? hashParams.get("token_hash");
       const otpTypeRaw = url.searchParams.get("type") ?? hashParams.get("type");
+      const flow = url.searchParams.get("flow");
 
       const tryVerifyOtpFallback = async () => {
         if (!tokenHash || !otpTypeRaw) {
@@ -88,6 +89,12 @@ export default function AuthCallbackPage() {
         .maybeSingle();
 
       if (!mounted) {
+        return;
+      }
+
+      const isRecoveryFlow = flow === "recovery" || otpTypeRaw === "recovery";
+      if (isRecoveryFlow) {
+        setLocation("/reset-password");
         return;
       }
 

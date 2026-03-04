@@ -3,3 +3,7 @@ export function getAuthCallbackUrl(): string {
   const base = configured || window.location.origin;
   return `${base.replace(/\/$/, "")}/auth/callback`;
 }
+
+export function getRecoveryCallbackUrl(): string {
+  return `${getAuthCallbackUrl()}?flow=recovery`;
+}

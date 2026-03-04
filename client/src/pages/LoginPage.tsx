@@ -78,6 +78,9 @@ export default function LoginPage() {
           onChange={(event) => setPassword(event.target.value)}
           required
         />
+        <p className="text-sm text-muted-foreground">
+          <Link href="/forgot-password" className="underline">Mot de passe oublié ?</Link>
+        </p>
         {errorMessage ? <p className="text-sm text-destructive">{errorMessage}</p> : null}
         <Button className="w-full" type="submit" disabled={isSubmitting}>
           {isSubmitting ? "Connexion..." : "Se connecter"}
