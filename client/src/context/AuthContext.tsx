@@ -6,6 +6,7 @@ import type { UserProfile } from "@/types/UserProfile";
 interface AuthContextValue {
   session: Session | null;
   loading: boolean;
+  profileLoading: boolean;
   userProfile: UserProfile | null;
   refreshProfile: () => Promise<UserProfile | null>;
   signOut: () => Promise<void>;
@@ -30,32 +31,40 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const [session, setSession] = useState<Session | null>(null);
   const [userProfile, setUserProfile] = useState<UserProfile | null>(null);
   const [loading, setLoading] = useState(true);
+  const [profileLoading, setProfileLoading] = useState(false);
 
   const refreshProfile = async (): Promise<UserProfile | null> => {
     if (!isSupabaseConfigured) {
       setUserProfile(null);
+      setProfileLoading(false);
       return null;
     }
 
     const userId = session?.user.id;
     if (!userId) {
       setUserProfile(null);
+      setProfileLoading(false);
       return null;
     }
 
-    const { data, error } = await supabase
-      .from("profiles")
-      .select("id,age,sex,relationship_status,horoscope_sign,interests,onboarding_completed,onboarding_skipped")
-      .eq("id", userId)
-      .maybeSingle();
+    setProfileLoading(true);
+    try {
+      const { data, error } = await supabase
+        .from("profiles")
+        .select("id,age,sex,relationship_status,horoscope_sign,interests,onboarding_completed,onboarding_skipped")
+        .eq("id", userId)
+        .maybeSingle();
 
-    if (error) {
-      throw error;
+      if (error) {
+        throw error;
+      }
+
+      const profile = data ? mapProfileRow(data) : null;
+      setUserProfile(profile);
+      return profile;
+    } finally {
+      setProfileLoading(false);
     }
-
-    const profile = data ? mapProfileRow(data) : null;
-    setUserProfile(profile);
-    return profile;
   };
 
   useEffect(() => {
@@ -96,6 +105,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       setSession(nextSession);
       if (!nextSession) {
         setUserProfile(null);
+        setProfileLoading(false);
       }
     });
 
@@ -108,24 +118,30 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   useEffect(() => {
     if (!session?.user.id) {
       setUserProfile(null);
+      setProfileLoading(false);
       return;
     }
-    void refreshProfile();
+    void refreshProfile().catch(() => {
+      setUserProfile(null);
+      setProfileLoading(false);
+    });
   }, [session?.user.id]);
 
   const value = useMemo<AuthContextValue>(
     () => ({
       session,
       loading,
+      profileLoading,
       userProfile,
       refreshProfile,
       signOut: async () => {
         await supabase.auth.signOut();
         setSession(null);
         setUserProfile(null);
+        setProfileLoading(false);
       },
     }),
-    [loading, session, userProfile],
+    [loading, profileLoading, session, userProfile],
   );
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;

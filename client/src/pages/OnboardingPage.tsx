@@ -24,7 +24,7 @@ const TOTAL_STEPS = 5;
 
 export default function OnboardingPage() {
   const [, setLocation] = useLocation();
-  const { session, refreshProfile } = useAuth();
+  const { session, userProfile, profileLoading, refreshProfile } = useAuth();
   const [step, setStep] = useState(0);
   const [ageInput, setAgeInput] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -45,6 +45,17 @@ export default function OnboardingPage() {
       setLocation("/login");
     }
   }, [setLocation, userId]);
+
+  useEffect(() => {
+    if (profileLoading) {
+      return;
+    }
+
+    const done = userProfile?.onboardingCompleted || userProfile?.onboardingSkipped;
+    if (done) {
+      setLocation("/app");
+    }
+  }, [profileLoading, setLocation, userProfile]);
 
   if (!userId) {
     return null;

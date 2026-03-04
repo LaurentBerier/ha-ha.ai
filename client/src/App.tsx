@@ -34,11 +34,11 @@ function RequireSession({ children }: { children: JSX.Element }) {
 }
 
 function RequireOnboarding({ children }: { children: JSX.Element }) {
-  const { loading, session, userProfile } = useAuth();
+  const { loading, profileLoading, session, userProfile } = useAuth();
   const [, setLocation] = useLocation();
 
   useEffect(() => {
-    if (loading) {
+    if (loading || profileLoading) {
       return;
     }
     if (!session) {
@@ -50,9 +50,9 @@ function RequireOnboarding({ children }: { children: JSX.Element }) {
     if (!done) {
       setLocation("/onboarding");
     }
-  }, [loading, session, setLocation, userProfile]);
+  }, [loading, profileLoading, session, setLocation, userProfile]);
 
-  if (loading || !session) {
+  if (loading || profileLoading || !session) {
     return <div className="min-h-screen bg-background" />;
   }
 
