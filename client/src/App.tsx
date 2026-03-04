@@ -13,6 +13,8 @@ import AuthCallbackPage from "@/pages/AuthCallbackPage";
 import ForgotPasswordPage from "@/pages/ForgotPasswordPage";
 import ResetPasswordPage from "@/pages/ResetPasswordPage";
 import OnboardingPage from "@/pages/OnboardingPage";
+import AppArtistSelectPage from "@/pages/AppArtistSelectPage";
+import AppChatPage from "@/pages/AppChatPage";
 import AppHomePage from "@/pages/AppHomePage";
 import NotFound from "@/pages/not-found";
 
@@ -81,6 +83,20 @@ function Router() {
         )}
       </Route>
       <Route path="/app">
+        {() => (
+          <RequireOnboarding>
+            <AppArtistSelectPage />
+          </RequireOnboarding>
+        )}
+      </Route>
+      <Route path="/app/chat/cathy-gauthier">
+        {() => (
+          <RequireOnboarding>
+            <AppChatPage />
+          </RequireOnboarding>
+        )}
+      </Route>
+      <Route path="/app/account">
         {() => (
           <RequireOnboarding>
             <AppHomePage />

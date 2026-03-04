@@ -1,9 +1,10 @@
 import { Link } from "wouter";
 import { Button } from "@/components/ui/button";
 import { useAuth } from "@/context/AuthContext";
+import { AppTopNav } from "@/components/AppTopNav";
 
 export default function AppHomePage() {
-  const { session, userProfile, signOut } = useAuth();
+  const { session, userProfile } = useAuth();
   const onboardingDone = userProfile?.onboardingCompleted || userProfile?.onboardingSkipped;
 
   return (
@@ -12,6 +13,8 @@ export default function AppHomePage() {
       <div className="pointer-events-none absolute top-12 -right-24 h-80 w-80 rounded-full bg-[#FF4D5E]/20 blur-3xl" />
 
       <div className="relative max-w-2xl mx-auto">
+        <AppTopNav active="account" />
+
         <div className="rounded-3xl border border-[#27344D] bg-[#121826] p-7 shadow-[0_18px_60px_rgba(0,0,0,0.45)]">
           <p className="mb-2 text-sm font-semibold tracking-[0.16em] uppercase text-[#94A3B8]">Ha-Ha.ai</p>
           <h1 className="text-4xl font-extrabold leading-tight">Espace utilisateur</h1>
@@ -45,17 +48,14 @@ export default function AppHomePage() {
               variant="outline"
               className="border-[#27344D] text-[#CBD5E1] hover:bg-[#1A2436]"
             >
-              <Link href="/">Retour landing</Link>
+              <Link href="/app">Aller aux humoristes</Link>
             </Button>
-          </div>
-
-          <div className="mt-5">
             <Button
+              asChild
               variant="outline"
-              className="border-[#FF4D5E] text-[#FF4D5E] hover:bg-[#FF4D5E]/10"
-              onClick={() => void signOut()}
+              className="border-[#27344D] text-[#CBD5E1] hover:bg-[#1A2436]"
             >
-              Se déconnecter
+              <Link href="/">Retour landing</Link>
             </Button>
           </div>
         </div>
