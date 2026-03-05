@@ -17,6 +17,7 @@ Set these in Vercel project settings:
 
 - `VITE_*` variables are injected into the browser build.
 - `VITE_HAHA_APP_WEB_URL` must point to the deployed Expo web app from `HAHA_app`.
+- deploy `HAHA_app` web with `npm run deploy:web` to ensure module-script patch is applied.
 - `SUPABASE_SERVICE_ROLE_KEY` is server-side only.
 - Keep `SESSION_SECRET` unique per environment.
 
@@ -56,9 +57,11 @@ If using branded sender (`info@ha-ha.ai`):
 ## Deployment Checklist
 
 1. SQL bootstrap already applied (`docs/supabase-setup.sql`).
-2. Vercel env vars configured.
-3. Deploy latest `main`.
-4. Validate:
+2. Deploy `HAHA_app` web (`npm run deploy:web`) and collect production URL.
+3. Set `VITE_HAHA_APP_WEB_URL` in this project with that URL.
+4. Vercel env vars configured.
+5. Deploy latest `main`.
+6. Validate:
    - `/login` and `/signup` render
    - signup email callback works
    - onboarding writes to `profiles`
@@ -66,3 +69,8 @@ If using branded sender (`info@ha-ha.ai`):
    - `/app/chat/cathy-gauthier` redirects to RN web app Cathy path
    - `/app/account` redirects to RN web app settings
    - waitlist insert works
+   - no white page on app-web URL (login or home renders)
+
+## Cross-Domain Session Note
+
+If `VITE_HAHA_APP_WEB_URL` is on a different domain than `www.ha-ha.ai`, browser session storage is origin-scoped. A second login on app-web domain can be expected.

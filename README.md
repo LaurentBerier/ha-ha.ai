@@ -120,3 +120,8 @@ Important:
 9. `/app/account` opens RN web app settings page.
 10. Landing CTA buttons route to `/signup` and `/login`.
 11. (Optional) `POST /api/waitlist` still inserts into `waitlist_entries`.
+
+## Bridge Notes
+
+- If `VITE_HAHA_APP_WEB_URL` uses a different domain than `www.ha-ha.ai`, a fresh login on the web app domain can be expected.
+- Ensure the `HAHA_app` web deployment uses the patched export pipeline (`npm run deploy:web`) to avoid white-screen bootstrap issues.

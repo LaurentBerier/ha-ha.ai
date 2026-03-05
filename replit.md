@@ -34,6 +34,7 @@ Behavior in protected app area:
 - `/app` -> `<VITE_HAHA_APP_WEB_URL>/`
 - `/app/chat/cathy-gauthier` -> `<VITE_HAHA_APP_WEB_URL>/mode-select/cathy-gauthier`
 - `/app/account` -> `<VITE_HAHA_APP_WEB_URL>/settings`
+- if domains differ, user may need to authenticate again on app-web domain
 
 Admin:
 

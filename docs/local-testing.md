@@ -52,6 +52,7 @@ Expected:
 - `/app/chat/cathy-gauthier` redirects to RN web app Cathy mode path
 - `/app/account` redirects to RN web app settings path
 - recovery callback (`/auth/callback?flow=recovery`) routes to `/reset-password`
+- if app-web runs on another domain, expect a separate login on first redirect
 
 ## 5) Common failures
 
@@ -63,3 +64,5 @@ Expected:
   - Check Supabase Auth URL config and redirect URLs include both `www` and non-`www` callback domains.
 - PKCE code verifier missing
   - Open the email link in the same browser and same domain (`www` vs non-`www`) used during signup.
+- white page on bridged app-web URL
+  - redeploy `HAHA_app` web with `npm run deploy:web` (patched module script export)

@@ -32,6 +32,7 @@ Core targets:
 - bridge behavior:
   - website landing/auth stays in this repo
   - authenticated `/app*` flow redirects to the deployed web build from `HAHA_app`
+  - domain switch may require a new sign-in on app-web origin
 - callback handling:
   - PKCE exchange path
   - `verifyOtp` fallback path
@@ -44,6 +45,7 @@ Core targets:
 - production email deliverability tuning (SMTP/branding rollout)
 - callback hardening around domain consistency (`www` vs non-`www`)
 - final cleanup of legacy wording from old waitlist era
+- optional custom-domain alignment between site and app-web to reduce re-login friction
 
 ## Planned Next
 
