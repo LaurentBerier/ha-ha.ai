@@ -18,7 +18,10 @@ Landing site and web auth/onboarding frontend for Ha-Ha.ai.
 - Apple OAuth login (via Supabase OAuth redirect)
 - Auth callback handling (`/auth/callback`)
 - Onboarding flow persisted in `public.profiles`
-- Auth-gated app route (`/app`)
+- Auth-gated bridge routes to the real React Native web app (`HAHA_app` repo):
+  - `/app` -> `<VITE_HAHA_APP_WEB_URL>/`
+  - `/app/chat/cathy-gauthier` -> `<VITE_HAHA_APP_WEB_URL>/mode-select/cathy-gauthier`
+  - `/app/account` -> `<VITE_HAHA_APP_WEB_URL>/settings`
 - Landing CTA now points to account creation (`/signup`)
 - Legacy waitlist APIs backed by `public.waitlist_entries` (still available for admin/backoffice)
 - Admin waitlist page (`/admin`)
@@ -46,6 +49,7 @@ Client:
 - `VITE_SUPABASE_URL`
 - `VITE_SUPABASE_ANON_KEY`
 - `VITE_PUBLIC_SITE_URL` (recommended; set canonical origin, e.g. `https://www.ha-ha.ai`)
+- `VITE_HAHA_APP_WEB_URL` (required; deployed URL of the web build from `HAHA_app`)
 
 Server/API:
 
@@ -111,6 +115,8 @@ Important:
 4. Email callback lands on `/auth/callback`.
 5. Recovery links route to `/reset-password`.
 6. New users are redirected to `/onboarding`.
-7. Completing/skipping onboarding redirects to `/app`.
-8. Landing CTA buttons route to `/signup` and `/login`.
-9. (Optional) `POST /api/waitlist` still inserts into `waitlist_entries`.
+7. Completing/skipping onboarding redirects to `/app` then opens the real RN web app.
+8. `/app/chat/cathy-gauthier` opens RN web app mode selection for Cathy.
+9. `/app/account` opens RN web app settings page.
+10. Landing CTA buttons route to `/signup` and `/login`.
+11. (Optional) `POST /api/waitlist` still inserts into `waitlist_entries`.

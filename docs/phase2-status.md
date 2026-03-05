@@ -23,10 +23,15 @@ Core targets:
   - `/reset-password`
   - `/auth/callback`
   - `/onboarding`
-  - `/app`
+  - `/app` (bridge to RN web app root)
+  - `/app/chat/cathy-gauthier` (bridge to RN web app Cathy mode path)
+  - `/app/account` (bridge to RN web app settings)
 - route guards:
   - protected session routes
-  - onboarding gate before `/app`
+  - onboarding gate before `/app` protected subtree
+- bridge behavior:
+  - website landing/auth stays in this repo
+  - authenticated `/app*` flow redirects to the deployed web build from `HAHA_app`
 - callback handling:
   - PKCE exchange path
   - `verifyOtp` fallback path
@@ -61,8 +66,10 @@ Manual checks:
 1. Signup sends confirmation email and callback lands on `/auth/callback`.
 2. Confirmed user is redirected to `/onboarding` when profile not completed.
 3. Forgot password sends recovery email and resets password via `/reset-password`.
-4. Completed onboarding unlocks `/app`.
-5. Unauthenticated access to `/app` redirects to `/login`.
+4. Completed onboarding unlocks `/app` and redirects to the RN web app.
+5. `/app` redirects to the RN web app root URL.
+6. `/app/chat/cathy-gauthier` and `/app/account` redirect to mapped RN web app routes.
+7. Unauthenticated access to `/app`, `/app/chat/cathy-gauthier`, and `/app/account` redirects to `/login`.
 
 ## Required Configuration
 
@@ -71,6 +78,7 @@ Client env:
 - `VITE_SUPABASE_URL`
 - `VITE_SUPABASE_ANON_KEY`
 - `VITE_PUBLIC_SITE_URL`
+- `VITE_HAHA_APP_WEB_URL`
 
 Server env:
 

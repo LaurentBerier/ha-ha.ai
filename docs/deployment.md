@@ -6,6 +6,7 @@ Set these in Vercel project settings:
 
 - `VITE_SUPABASE_URL`
 - `VITE_SUPABASE_ANON_KEY`
+- `VITE_HAHA_APP_WEB_URL`
 - `SUPABASE_URL`
 - `SUPABASE_ANON_KEY`
 - `SUPABASE_SERVICE_ROLE_KEY`
@@ -15,6 +16,7 @@ Set these in Vercel project settings:
 ## Notes
 
 - `VITE_*` variables are injected into the browser build.
+- `VITE_HAHA_APP_WEB_URL` must point to the deployed Expo web app from `HAHA_app`.
 - `SUPABASE_SERVICE_ROLE_KEY` is server-side only.
 - Keep `SESSION_SECRET` unique per environment.
 
@@ -60,4 +62,7 @@ If using branded sender (`info@ha-ha.ai`):
    - `/login` and `/signup` render
    - signup email callback works
    - onboarding writes to `profiles`
+   - `/app` redirects to RN web app root
+   - `/app/chat/cathy-gauthier` redirects to RN web app Cathy path
+   - `/app/account` redirects to RN web app settings
    - waitlist insert works

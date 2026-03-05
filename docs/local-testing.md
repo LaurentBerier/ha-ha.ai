@@ -41,12 +41,16 @@ Open:
 - `/auth/callback`
 - `/onboarding`
 - `/app`
+- `/app/chat/cathy-gauthier`
+- `/app/account`
 
 Expected:
 
 - unauthenticated users are redirected away from protected routes
 - authenticated users without onboarding are forced to onboarding
-- after onboarding complete/skip, `/app` is accessible
+- after onboarding complete/skip, `/app` redirects to RN web app root
+- `/app/chat/cathy-gauthier` redirects to RN web app Cathy mode path
+- `/app/account` redirects to RN web app settings path
 - recovery callback (`/auth/callback?flow=recovery`) routes to `/reset-password`
 
 ## 5) Common failures

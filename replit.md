@@ -25,6 +25,15 @@ Protected:
 
 - `/onboarding` (requires authenticated session)
 - `/app` (requires authenticated session + onboarding complete/skip)
+- `/app/chat/cathy-gauthier`
+- `/app/account`
+
+Behavior in protected app area:
+
+- `/app*` routes are bridge routes that redirect to the real RN web app (`HAHA_app`)
+- `/app` -> `<VITE_HAHA_APP_WEB_URL>/`
+- `/app/chat/cathy-gauthier` -> `<VITE_HAHA_APP_WEB_URL>/mode-select/cathy-gauthier`
+- `/app/account` -> `<VITE_HAHA_APP_WEB_URL>/settings`
 
 Admin:
 
@@ -48,6 +57,7 @@ Client (Vite):
 
 - `VITE_SUPABASE_URL`
 - `VITE_SUPABASE_ANON_KEY`
+- `VITE_HAHA_APP_WEB_URL`
 
 Server / API:
 
@@ -86,3 +96,4 @@ Manual flow:
 3. Trigger password recovery from `/forgot-password` and complete reset on `/reset-password`.
 4. User is redirected to onboarding after confirmed signup.
 5. Complete or skip onboarding and land on `/app`.
+6. Verify `/app`, `/app/chat/cathy-gauthier`, and `/app/account` each redirect to RN web app.

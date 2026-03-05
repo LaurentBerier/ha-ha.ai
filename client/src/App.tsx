@@ -13,9 +13,7 @@ import AuthCallbackPage from "@/pages/AuthCallbackPage";
 import ForgotPasswordPage from "@/pages/ForgotPasswordPage";
 import ResetPasswordPage from "@/pages/ResetPasswordPage";
 import OnboardingPage from "@/pages/OnboardingPage";
-import AppArtistSelectPage from "@/pages/AppArtistSelectPage";
-import AppChatPage from "@/pages/AppChatPage";
-import AppHomePage from "@/pages/AppHomePage";
+import AppBridgePage from "@/pages/AppBridgePage";
 import NotFound from "@/pages/not-found";
 
 function RequireSession({ children }: { children: JSX.Element }) {
@@ -85,21 +83,21 @@ function Router() {
       <Route path="/app">
         {() => (
           <RequireOnboarding>
-            <AppArtistSelectPage />
+            <AppBridgePage />
           </RequireOnboarding>
         )}
       </Route>
       <Route path="/app/chat/cathy-gauthier">
         {() => (
           <RequireOnboarding>
-            <AppChatPage />
+            <AppBridgePage />
           </RequireOnboarding>
         )}
       </Route>
       <Route path="/app/account">
         {() => (
           <RequireOnboarding>
-            <AppHomePage />
+            <AppBridgePage />
           </RequireOnboarding>
         )}
       </Route>
