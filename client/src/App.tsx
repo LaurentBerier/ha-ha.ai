@@ -101,6 +101,20 @@ function Router() {
           </RequireOnboarding>
         )}
       </Route>
+      <Route path="/app/account/edit-profile">
+        {() => (
+          <RequireOnboarding>
+            <AppBridgePage />
+          </RequireOnboarding>
+        )}
+      </Route>
+      <Route path="/app/account/subscription">
+        {() => (
+          <RequireOnboarding>
+            <AppBridgePage />
+          </RequireOnboarding>
+        )}
+      </Route>
       <Route path="/admin" component={AdminPage} />
       <Route component={NotFound} />
     </Switch>

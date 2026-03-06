@@ -13,15 +13,23 @@ Landing site and web auth/onboarding frontend for Ha-Ha.ai.
 ## Features
 
 - Bilingual landing page (`fr`/`en`)
+- App-style top bar on landing (logo + hamburger account menu), while preserving full landing content
 - Supabase email/password login and signup
 - Password reset flow (`/forgot-password` -> email -> `/reset-password`)
 - Apple OAuth login (via Supabase OAuth redirect)
 - Auth callback handling (`/auth/callback`)
 - Onboarding flow persisted in `public.profiles`
+- Hamburger account menu behavior:
+  - `Mon compte / My account`: open app, settings, edit profile, subscription
+  - `Préférences / Preferences`: language switch (`fr`/`en`)
+  - Auth action changes by state: sign in / sign up / sign out
+  - Menu stays open until explicit close (outside click, Escape, or navigation)
 - Auth-gated bridge routes to the real React Native web app (`HAHA_app` repo):
   - `/app` -> `<VITE_HAHA_APP_WEB_URL>/`
   - `/app/chat/cathy-gauthier` -> `<VITE_HAHA_APP_WEB_URL>/mode-select/cathy-gauthier`
   - `/app/account` -> `<VITE_HAHA_APP_WEB_URL>/settings`
+  - `/app/account/edit-profile` -> `<VITE_HAHA_APP_WEB_URL>/settings/edit-profile`
+  - `/app/account/subscription` -> `<VITE_HAHA_APP_WEB_URL>/settings/subscription`
 - Landing CTA now points to account creation (`/signup`)
 - Legacy waitlist APIs backed by `public.waitlist_entries` (still available for admin/backoffice)
 - Admin waitlist page (`/admin`)
@@ -109,17 +117,22 @@ Important:
 
 ## Manual Verification Checklist
 
-1. `/login` loads.
-2. `/signup` creates user and sends confirmation email.
-3. `/forgot-password` sends reset email.
-4. Email callback lands on `/auth/callback`.
-5. Recovery links route to `/reset-password`.
-6. New users are redirected to `/onboarding`.
-7. Completing/skipping onboarding redirects to `/app` then opens the real RN web app.
-8. `/app/chat/cathy-gauthier` opens RN web app mode selection for Cathy.
-9. `/app/account` opens RN web app settings page.
-10. Landing CTA buttons route to `/signup` and `/login`.
-11. (Optional) `POST /api/waitlist` still inserts into `waitlist_entries`.
+1. `/` loads landing with app-style top bar.
+2. Hamburger menu opens and stays open until explicit close.
+3. Language switch in hamburger (`fr`/`en`) updates visible copy.
+4. `/login` loads.
+5. `/signup` creates user and sends confirmation email.
+6. `/forgot-password` sends reset email.
+7. Email callback lands on `/auth/callback`.
+8. Recovery links route to `/reset-password`.
+9. New users are redirected to `/onboarding`.
+10. Completing/skipping onboarding redirects to `/app` then opens the real RN web app.
+11. `/app/chat/cathy-gauthier` opens RN web app mode selection for Cathy.
+12. `/app/account` opens RN web app settings page.
+13. `/app/account/edit-profile` opens RN web app edit-profile settings page.
+14. `/app/account/subscription` opens RN web app subscription settings page.
+15. Landing CTA buttons route to `/signup` and `/login`.
+16. (Optional) `POST /api/waitlist` still inserts into `waitlist_entries`.
 
 ## Bridge Notes
 

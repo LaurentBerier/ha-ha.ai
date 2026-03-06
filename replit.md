@@ -27,6 +27,8 @@ Protected:
 - `/app` (requires authenticated session + onboarding complete/skip)
 - `/app/chat/cathy-gauthier`
 - `/app/account`
+- `/app/account/edit-profile`
+- `/app/account/subscription`
 
 Behavior in protected app area:
 
@@ -34,7 +36,16 @@ Behavior in protected app area:
 - `/app` -> `<VITE_HAHA_APP_WEB_URL>/`
 - `/app/chat/cathy-gauthier` -> `<VITE_HAHA_APP_WEB_URL>/mode-select/cathy-gauthier`
 - `/app/account` -> `<VITE_HAHA_APP_WEB_URL>/settings`
+- `/app/account/edit-profile` -> `<VITE_HAHA_APP_WEB_URL>/settings/edit-profile`
+- `/app/account/subscription` -> `<VITE_HAHA_APP_WEB_URL>/settings/subscription`
 - if domains differ, user may need to authenticate again on app-web domain
+
+Landing header behavior:
+
+- top bar uses app visual style (logo left, hamburger right)
+- hamburger opens account/preference/auth menu
+- language switch (`fr`/`en`) is in the hamburger menu
+- menu closes on outside click, Escape, or navigation
 
 Admin:
 
@@ -97,4 +108,4 @@ Manual flow:
 3. Trigger password recovery from `/forgot-password` and complete reset on `/reset-password`.
 4. User is redirected to onboarding after confirmed signup.
 5. Complete or skip onboarding and land on `/app`.
-6. Verify `/app`, `/app/chat/cathy-gauthier`, and `/app/account` each redirect to RN web app.
+6. Verify `/app`, `/app/chat/cathy-gauthier`, `/app/account`, `/app/account/edit-profile`, and `/app/account/subscription` each redirect to RN web app.

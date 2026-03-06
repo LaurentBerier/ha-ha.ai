@@ -16,9 +16,13 @@ export function buildAppWebUrl(currentPath: string): string {
   const targetPath =
     currentPath === "/app/account"
       ? "/settings"
-      : currentPath === "/app/chat/cathy-gauthier"
-        ? "/mode-select/cathy-gauthier"
-        : "/";
+      : currentPath === "/app/account/edit-profile"
+        ? "/settings/edit-profile"
+        : currentPath === "/app/account/subscription"
+          ? "/settings/subscription"
+          : currentPath === "/app/chat/cathy-gauthier"
+            ? "/mode-select/cathy-gauthier"
+            : "/";
 
   return `${appWebBaseUrl}${targetPath}`;
 }

@@ -34,6 +34,7 @@ curl -i -X POST http://127.0.0.1:5000/api/waitlist \
 
 Open:
 
+- `/`
 - `/login`
 - `/signup`
 - `/forgot-password`
@@ -43,14 +44,20 @@ Open:
 - `/app`
 - `/app/chat/cathy-gauthier`
 - `/app/account`
+- `/app/account/edit-profile`
+- `/app/account/subscription`
 
 Expected:
 
+- `/` keeps landing content and shows app-style top bar
+- hamburger menu opens without immediate close
 - unauthenticated users are redirected away from protected routes
 - authenticated users without onboarding are forced to onboarding
 - after onboarding complete/skip, `/app` redirects to RN web app root
 - `/app/chat/cathy-gauthier` redirects to RN web app Cathy mode path
 - `/app/account` redirects to RN web app settings path
+- `/app/account/edit-profile` redirects to RN web app edit-profile settings path
+- `/app/account/subscription` redirects to RN web app subscription settings path
 - recovery callback (`/auth/callback?flow=recovery`) routes to `/reset-password`
 - if app-web runs on another domain, expect a separate login on first redirect
 

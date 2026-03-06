@@ -1,6 +1,6 @@
 # Phase 2 Status (Website)
 
-Last updated: **2026-03-04**
+Last updated: **2026-03-06**
 
 ## Scope
 
@@ -17,6 +17,7 @@ Core targets:
 
 - Supabase browser auth client
 - pages implemented:
+  - `/` (landing with app-style top bar + hamburger)
   - `/login`
   - `/signup`
   - `/forgot-password`
@@ -26,6 +27,8 @@ Core targets:
   - `/app` (bridge to RN web app root)
   - `/app/chat/cathy-gauthier` (bridge to RN web app Cathy mode path)
   - `/app/account` (bridge to RN web app settings)
+  - `/app/account/edit-profile` (bridge to RN web app edit-profile settings path)
+  - `/app/account/subscription` (bridge to RN web app subscription settings path)
 - route guards:
   - protected session routes
   - onboarding gate before `/app` protected subtree
@@ -38,6 +41,11 @@ Core targets:
   - `verifyOtp` fallback path
   - recovery flow routing to `/reset-password`
 - landing CTA now routes to account creation/login
+- top bar aligned with app UX:
+  - left logo returns to landing root
+  - right hamburger opens account + preferences + auth actions
+  - language switch (`fr`/`en`) moved under menu preferences
+  - menu closes only on explicit dismiss (outside click, Escape, or navigation)
 - Supabase waitlist storage retained for admin/backoffice use
 
 ## In Progress
@@ -70,8 +78,9 @@ Manual checks:
 3. Forgot password sends recovery email and resets password via `/reset-password`.
 4. Completed onboarding unlocks `/app` and redirects to the RN web app.
 5. `/app` redirects to the RN web app root URL.
-6. `/app/chat/cathy-gauthier` and `/app/account` redirect to mapped RN web app routes.
-7. Unauthenticated access to `/app`, `/app/chat/cathy-gauthier`, and `/app/account` redirects to `/login`.
+6. `/app/chat/cathy-gauthier`, `/app/account`, `/app/account/edit-profile`, and `/app/account/subscription` redirect to mapped RN web app routes.
+7. Unauthenticated access to `/app*` bridge routes redirects to `/login`.
+8. Hamburger menu on `/` opens reliably and remains visible until explicit dismiss.
 
 ## Required Configuration
 

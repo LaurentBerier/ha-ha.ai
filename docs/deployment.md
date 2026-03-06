@@ -62,12 +62,16 @@ If using branded sender (`info@ha-ha.ai`):
 4. Vercel env vars configured.
 5. Deploy latest `main`.
 6. Validate:
+   - `/` renders landing with app-style top bar
+   - hamburger opens/closes correctly (no immediate close)
    - `/login` and `/signup` render
    - signup email callback works
    - onboarding writes to `profiles`
    - `/app` redirects to RN web app root
    - `/app/chat/cathy-gauthier` redirects to RN web app Cathy path
    - `/app/account` redirects to RN web app settings
+   - `/app/account/edit-profile` redirects to RN web app edit-profile settings
+   - `/app/account/subscription` redirects to RN web app subscription settings
    - waitlist insert works
    - no white page on app-web URL (login or home renders)
 
