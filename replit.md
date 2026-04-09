@@ -1,103 +1,78 @@
 # Ha-Ha.ai Website Notes
 
-## Current Status (March 2026)
+## Current Status (April 2026)
 
-This repository now uses **Supabase** as the single backend for:
+Bilingual (FR/EN) landing page for Ha-Ha.ai with:
 
-- user authentication (email/password + Apple OAuth)
-- onboarding profile storage (`profiles`)
+- Email waitlist form (direct PostgreSQL, `pg` driver)
+- Password-protected admin page for viewing waitlist entries
+- Dark theme with red/blue accents
+- Auth pages (login/signup/onboarding) present but require Supabase credentials to function
 
-Legacy Neon/Drizzle files were removed.
+## Architecture
+
+- **Frontend**: React + Vite + Tailwind CSS + Framer Motion
+- **Backend**: Express server with `pg` for PostgreSQL
+- **Database**: PostgreSQL via `DATABASE_URL` (Replit built-in) or `NEON_DATABASE_URL`
+- **Vercel API**: Serverless functions in `api/` directory (also use `pg`)
+- **Routing**: `wouter` for client-side routing
+
+## Database
+
+The `waitlist_entries` table:
+```sql
+CREATE TABLE waitlist_entries (
+  id VARCHAR PRIMARY KEY DEFAULT gen_random_uuid(),
+  email TEXT UNIQUE NOT NULL,
+  created_at TIMESTAMP NOT NULL DEFAULT now()
+);
+```
 
 ## App Routes
 
 Public:
 
-- `/` landing page
-- `/login`
-- `/signup`
-- `/forgot-password`
-- `/reset-password`
-- `/auth/callback`
+- `/` landing page (with waitlist email form)
+- `/login`, `/signup`, `/forgot-password`, `/reset-password`, `/auth/callback` (require Supabase config)
+- `/admin` (password-gated waitlist viewer)
 
-Protected:
+Protected (require Supabase auth):
 
-- `/onboarding` (requires authenticated session)
-- `/app` (requires authenticated session + onboarding complete/skip)
-- `/app/chat/cathy-gauthier`
-- `/app/account`
-- `/app/account/edit-profile`
-- `/app/account/subscription`
+- `/onboarding`, `/app`, `/app/chat/cathy-gauthier`, `/app/account/*`
 
-Behavior in protected app area:
+## API Endpoints
 
-- `/app*` routes are bridge routes that redirect to the real RN web app (`HAHA_app`)
-- `/app` -> `<VITE_HAHA_APP_WEB_URL>/`
-- `/app/chat/cathy-gauthier` -> `<VITE_HAHA_APP_WEB_URL>/mode-select/cathy-gauthier`
-- `/app/account` -> `<VITE_HAHA_APP_WEB_URL>/settings`
-- `/app/account/edit-profile` -> `<VITE_HAHA_APP_WEB_URL>/settings/edit-profile`
-- `/app/account/subscription` -> `<VITE_HAHA_APP_WEB_URL>/settings/subscription`
-- if domains differ, user may need to authenticate again on app-web domain
-
-Landing header behavior:
-
-- top bar uses app visual style (logo left, hamburger right)
-- hamburger opens account/preference/auth menu
-- language switch (`fr`/`en`) is in the hamburger menu
-- menu closes on outside click, Escape, or navigation
-
-Admin:
-
-- `/admin` (session-password gated page for waitlist export)
-
-## Supabase Requirements
-
-Run SQL bootstrap once in Supabase:
-
-
-This creates:
-
-- `public.profiles` + signup trigger
-- RLS policies for profile and waitlist
+- `POST /api/waitlist` - Add email to waitlist (201 new, 200 existing)
+- `GET /api/waitlist/count` - Get waitlist count
+- `POST /api/admin/login` - Admin login with ADMIN_PASSWORD
+- `POST /api/admin/logout` - Admin logout
+- `GET /api/admin/waitlist` - Get all waitlist entries (requires admin session)
 
 ## Environment Variables
 
-Client (Vite):
+Required:
 
-- `VITE_HAHA_APP_WEB_URL`
+- `DATABASE_URL` or `NEON_DATABASE_URL` - PostgreSQL connection string
+- `SESSION_SECRET` - Express session secret
+- `ADMIN_PASSWORD` - Password for admin page
 
-Server / API:
+Optional (for auth features):
 
-- `SESSION_SECRET`
-- `ADMIN_PASSWORD`
+- `VITE_SUPABASE_URL`, `VITE_SUPABASE_ANON_KEY` - Frontend Supabase client
+- `SUPABASE_URL`, `SUPABASE_SERVICE_ROLE_KEY` - Server Supabase client
 
-See `.env.example`.
+## Key Files
+
+- `server/supabaseAdmin.ts` - Database helper (pg Pool)
+- `server/routes.ts` - Express API routes
+- `client/src/components/SignupSection.tsx` - Waitlist email form
+- `client/src/lib/i18n.ts` - FR/EN translations
+- `api/` - Vercel serverless functions (mirror Express routes)
 
 ## Local Development
 
 ```bash
-npm install
 npm run dev
 ```
 
-If port `5000` is already used:
-
-```bash
-PORT=5050 npm run dev
-```
-
-## Validation
-
-```bash
-npm run check
-npm run build
-```
-
-Manual flow:
-
-1. `GET /login` and `GET /signup` load.
-2. Sign up user, confirm via email callback.
-3. Trigger password recovery from `/forgot-password` and complete reset on `/reset-password`.
-4. User is redirected to onboarding after confirmed signup.
-5. Complete or skip onboarding and land on `/app`.
-6. Verify `/app`, `/app/chat/cathy-gauthier`, `/app/account`, `/app/account/edit-profile`, and `/app/account/subscription` each redirect to RN web app.
+Server runs on port 5000 (Express + Vite dev server).

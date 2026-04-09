@@ -1,7 +1,7 @@
+import { useState } from 'react';
 import { type Language, copy } from '@/lib/i18n';
 import { Button } from '@/components/ui/button';
-import { ArrowRight } from 'lucide-react';
-import { Link } from 'wouter';
+import { ArrowRight, CheckCircle, Loader2 } from 'lucide-react';
 import stageImage from '@assets/image_1769047346055.png';
 
 interface SignupSectionProps {
@@ -10,6 +10,37 @@ interface SignupSectionProps {
 
 export function SignupSection({ language }: SignupSectionProps) {
   const t = copy[language].cta;
+  const [email, setEmail] = useState('');
+  const [status, setStatus] = useState<'idle' | 'loading' | 'success' | 'already' | 'error'>('idle');
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!email.trim()) return;
+
+    setStatus('loading');
+    try {
+      const res = await fetch('/api/waitlist', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email: email.trim() }),
+      });
+
+      const data = await res.json();
+
+      if (res.status === 201) {
+        setStatus('success');
+        setEmail('');
+      } else if (res.status === 200 && data.message === 'Already on waitlist') {
+        setStatus('already');
+      } else {
+        setStatus('error');
+      }
+    } catch {
+      setStatus('error');
+    }
+  };
+
+  const isSubmitted = status === 'success' || status === 'already';
 
   return (
     <section id="signup" className="py-12 sm:py-16 relative overflow-hidden">
@@ -33,17 +64,50 @@ export function SignupSection({ language }: SignupSectionProps) {
           </p>
         </div>
 
-        <div className="flex flex-col sm:flex-row items-center justify-center gap-3">
-          <Button asChild size="lg" data-testid="button-signup-cta">
-            <Link href="/app">
-              {t.button}
-              <ArrowRight className="w-4 h-4 ml-2" />
-            </Link>
-          </Button>
-          <Button asChild size="lg" variant="outline" data-testid="button-login-cta">
-            <Link href="/app">{t.secondaryButton}</Link>
-          </Button>
-        </div>
+        {isSubmitted ? (
+          <div className="flex flex-col items-center gap-3 text-center" data-testid="waitlist-confirmation">
+            <CheckCircle className="w-10 h-10 text-green-500" />
+            <p className="text-lg font-medium">
+              {status === 'already' ? t.already : t.success}
+            </p>
+          </div>
+        ) : (
+          <form onSubmit={handleSubmit} className="flex flex-col sm:flex-row items-center justify-center gap-3">
+            <input
+              type="email"
+              required
+              value={email}
+              onChange={(e) => {
+                setEmail(e.target.value);
+                if (status === 'error') setStatus('idle');
+              }}
+              placeholder={t.placeholder}
+              className="w-full sm:w-80 px-4 py-3 rounded-lg bg-card border border-border text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary"
+              data-testid="input-waitlist-email"
+            />
+            <Button
+              type="submit"
+              size="lg"
+              disabled={status === 'loading'}
+              data-testid="button-waitlist-submit"
+            >
+              {status === 'loading' ? (
+                <Loader2 className="w-4 h-4 animate-spin" />
+              ) : (
+                <>
+                  {t.button}
+                  <ArrowRight className="w-4 h-4 ml-2" />
+                </>
+              )}
+            </Button>
+          </form>
+        )}
+
+        {status === 'error' && (
+          <p className="text-center text-red-500 mt-3" data-testid="text-waitlist-error">
+            {t.error}
+          </p>
+        )}
       </div>
     </section>
   );

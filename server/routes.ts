@@ -1,15 +1,12 @@
 import type { Express } from "express";
 import { type Server } from "http";
-import { randomUUID } from "crypto";
 import { insertWaitlistSchema } from "@shared/schema";
-
-interface WaitlistEntry {
-  id: string;
-  email: string;
-  createdAt: string;
-}
-
-const waitlistEntries: WaitlistEntry[] = [];
+import {
+  getWaitlistEntries,
+  getWaitlistEntryByEmail,
+  insertWaitlistEntry,
+  getWaitlistCount,
+} from "./supabaseAdmin";
 
 function requireAdmin(req: any, res: any, next: any) {
   if (req.session?.isAdmin) {
@@ -42,7 +39,20 @@ export async function registerRoutes(
   });
 
   app.get("/api/admin/waitlist", requireAdmin, async (_req, res) => {
-    return res.json({ entries: [...waitlistEntries].reverse() });
+    try {
+      const data = await getWaitlistEntries();
+
+      const entries = data.map((entry: any) => ({
+        id: entry.id,
+        email: entry.email,
+        createdAt: entry.created_at,
+      }));
+
+      return res.json({ entries });
+    } catch (error) {
+      console.error("Admin waitlist error:", error);
+      return res.status(500).json({ error: "Failed to get waitlist" });
+    }
   });
 
   app.post("/api/waitlist", async (req, res) => {
@@ -56,25 +66,54 @@ export async function registerRoutes(
         });
       }
 
-      const existingEntry = waitlistEntries.find((entry) => entry.email === result.data.email);
+      let existingEntry;
+      try {
+        existingEntry = await getWaitlistEntryByEmail(result.data.email);
+      } catch (err) {
+        console.error("Waitlist lookup error:", err);
+      }
+
       if (existingEntry) {
         return res.status(200).json({
           message: "Already on waitlist",
-          entry: existingEntry,
+          entry: {
+            id: existingEntry.id,
+            email: existingEntry.email,
+            createdAt: existingEntry.created_at,
+          },
         });
       }
 
-      const entry: WaitlistEntry = {
-        id: randomUUID(),
-        email: result.data.email,
-        createdAt: new Date().toISOString(),
-      };
+      let entry;
+      try {
+        entry = await insertWaitlistEntry(result.data.email);
+      } catch (err: any) {
+        if (err?.code === '23505') {
+          const existing = await getWaitlistEntryByEmail(result.data.email);
+          return res.status(200).json({
+            message: "Already on waitlist",
+            entry: existing ? {
+              id: existing.id,
+              email: existing.email,
+              createdAt: existing.created_at,
+            } : undefined,
+          });
+        }
+        console.error("Waitlist insert error:", err);
+        return res.status(500).json({ error: "Failed to join waitlist" });
+      }
 
-      waitlistEntries.push(entry);
+      if (!entry) {
+        return res.status(500).json({ error: "Failed to join waitlist" });
+      }
 
       return res.status(201).json({
         message: "Successfully added to waitlist",
-        entry,
+        entry: {
+          id: entry.id,
+          email: entry.email,
+          createdAt: entry.created_at,
+        },
       });
     } catch (error) {
       console.error("Waitlist error:", error);
@@ -83,7 +122,13 @@ export async function registerRoutes(
   });
 
   app.get("/api/waitlist/count", async (_req, res) => {
-    return res.json({ count: waitlistEntries.length });
+    try {
+      const count = await getWaitlistCount();
+      return res.json({ count });
+    } catch (error) {
+      console.error("Waitlist count error:", error);
+      return res.status(500).json({ error: "Failed to get waitlist count" });
+    }
   });
 
   return httpServer;

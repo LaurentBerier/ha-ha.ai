@@ -1,5 +1,5 @@
 import type { VercelRequest, VercelResponse } from "@vercel/node";
-import { addEntry, findEntryByEmail } from "./_waitlistStore";
+import { getPool } from "./_supabase";
 
 export default async function handler(
   req: VercelRequest,
@@ -27,20 +27,44 @@ export default async function handler(
       }
 
       const normalizedEmail = email.toLowerCase().trim();
-      const existing = findEntryByEmail(normalizedEmail);
+      const pool = getPool();
 
-      if (existing) {
+      const existing = await pool.query(
+        "SELECT id, email, created_at FROM waitlist_entries WHERE email = $1",
+        [normalizedEmail]
+      );
+
+      if (existing.rows.length > 0) {
         return res.status(200).json({
           message: "Already on waitlist",
-          entry: existing,
+          entry: {
+            id: existing.rows[0].id,
+            email: existing.rows[0].email,
+            createdAt: existing.rows[0].created_at,
+          },
         });
       }
 
-      const entry = addEntry(normalizedEmail);
-      return res.status(201).json({
-        message: "Successfully added to waitlist",
-        entry,
-      });
+      try {
+        const result = await pool.query(
+          "INSERT INTO waitlist_entries (email) VALUES ($1) RETURNING id, email, created_at",
+          [normalizedEmail]
+        );
+
+        return res.status(201).json({
+          message: "Successfully added to waitlist",
+          entry: {
+            id: result.rows[0].id,
+            email: result.rows[0].email,
+            createdAt: result.rows[0].created_at,
+          },
+        });
+      } catch (insertErr: any) {
+        if (insertErr?.code === "23505") {
+          return res.status(200).json({ message: "Already on waitlist" });
+        }
+        throw insertErr;
+      }
     } catch (error) {
       console.error("Waitlist error:", error);
       return res.status(500).json({ error: "Failed to join waitlist" });

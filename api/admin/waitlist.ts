@@ -1,6 +1,6 @@
 import type { VercelRequest, VercelResponse } from "@vercel/node";
 import { createHmac, timingSafeEqual } from "crypto";
-import { listEntries } from "../_waitlistStore";
+import { getPool } from "../_supabase";
 
 function getSecret(): string {
   const secret = process.env.SESSION_SECRET;
@@ -63,7 +63,23 @@ export default async function handler(
       return res.status(401).json({ error: "Unauthorized" });
     }
 
-    return res.json({ entries: listEntries() });
+    try {
+      const pool = getPool();
+      const result = await pool.query(
+        "SELECT id, email, created_at FROM waitlist_entries ORDER BY created_at DESC"
+      );
+
+      const entries = result.rows.map((entry: any) => ({
+        id: entry.id,
+        email: entry.email,
+        createdAt: entry.created_at,
+      }));
+
+      return res.json({ entries });
+    } catch (error) {
+      console.error("Admin waitlist error:", error);
+      return res.status(500).json({ error: "Failed to get waitlist" });
+    }
   }
 
   return res.status(405).json({ error: "Method not allowed" });
