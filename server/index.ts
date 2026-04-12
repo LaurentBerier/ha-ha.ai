@@ -30,9 +30,11 @@ app.use(
 
 app.use(express.urlencoded({ extended: false }));
 
-const sessionSecret = process.env.SESSION_SECRET;
+const sessionSecret =
+  process.env.SESSION_SECRET ??
+  (process.env.NODE_ENV === "production" ? undefined : "local-dev-session-secret");
 if (!sessionSecret) {
-  throw new Error("SESSION_SECRET environment variable is required");
+  throw new Error("SESSION_SECRET environment variable is required in production");
 }
 
 app.use(

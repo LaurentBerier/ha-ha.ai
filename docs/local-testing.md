@@ -63,10 +63,7 @@ Expected:
 
 ## 5) Common failures
 
-- `SUPABASE_URL and SUPABASE_SERVICE_ROLE_KEY must be set`
   - Server env is missing.
-- `Could not find table 'public.waitlist_entries'`
-  - Run `docs/supabase-setup.sql` in Supabase.
 - Callback returns with no session
   - Check Supabase Auth URL config and redirect URLs include both `www` and non-`www` callback domains.
 - PKCE code verifier missing

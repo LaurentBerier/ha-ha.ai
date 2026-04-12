@@ -31,7 +31,6 @@ Landing site and web auth/onboarding frontend for Ha-Ha.ai.
   - `/app/account/edit-profile` -> `<VITE_HAHA_APP_WEB_URL>/settings/edit-profile`
   - `/app/account/subscription` -> `<VITE_HAHA_APP_WEB_URL>/settings/subscription`
 - Landing CTA now points to account creation (`/signup`)
-- Legacy waitlist APIs backed by `public.waitlist_entries` (still available for admin/backoffice)
 - Admin waitlist page (`/admin`)
 
 ## Project Layout
@@ -54,16 +53,11 @@ Create `.env` from `.env.example`.
 
 Client:
 
-- `VITE_SUPABASE_URL`
-- `VITE_SUPABASE_ANON_KEY`
 - `VITE_PUBLIC_SITE_URL` (recommended; set canonical origin, e.g. `https://www.ha-ha.ai`)
 - `VITE_HAHA_APP_WEB_URL` (required; deployed URL of the web build from `HAHA_app`)
 
 Server/API:
 
-- `SUPABASE_URL`
-- `SUPABASE_ANON_KEY`
-- `SUPABASE_SERVICE_ROLE_KEY`
 - `SESSION_SECRET`
 - `ADMIN_PASSWORD`
 
@@ -71,7 +65,6 @@ Server/API:
 
 Run once in Supabase SQL editor:
 
-- `docs/supabase-setup.sql`
 - `docs/phase2-status.md` (current execution status)
 
 ## Supabase Auth URL Configuration
@@ -113,7 +106,6 @@ Ensure all env vars are set in Vercel project settings.
 Important:
 
 - `VITE_*` vars are required at build time for frontend auth pages.
-- `SUPABASE_SERVICE_ROLE_KEY` is server-only and must never be exposed client-side.
 
 ## Manual Verification Checklist
 
@@ -132,7 +124,6 @@ Important:
 13. `/app/account/edit-profile` opens RN web app edit-profile settings page.
 14. `/app/account/subscription` opens RN web app subscription settings page.
 15. Landing CTA buttons route to `/signup` and `/login`.
-16. (Optional) `POST /api/waitlist` still inserts into `waitlist_entries`.
 
 ## Bridge Notes
 

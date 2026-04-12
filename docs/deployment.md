@@ -4,12 +4,7 @@
 
 Set these in Vercel project settings:
 
-- `VITE_SUPABASE_URL`
-- `VITE_SUPABASE_ANON_KEY`
 - `VITE_HAHA_APP_WEB_URL`
-- `SUPABASE_URL`
-- `SUPABASE_ANON_KEY`
-- `SUPABASE_SERVICE_ROLE_KEY`
 - `SESSION_SECRET`
 - `ADMIN_PASSWORD`
 
@@ -18,7 +13,6 @@ Set these in Vercel project settings:
 - `VITE_*` variables are injected into the browser build.
 - `VITE_HAHA_APP_WEB_URL` must point to the deployed Expo web app from `HAHA_app`.
 - deploy `HAHA_app` web with `npm run deploy:web` to ensure module-script patch is applied.
-- `SUPABASE_SERVICE_ROLE_KEY` is server-side only.
 - Keep `SESSION_SECRET` unique per environment.
 
 ## Supabase Dashboard Auth Configuration
@@ -56,7 +50,6 @@ If using branded sender (`info@ha-ha.ai`):
 
 ## Deployment Checklist
 
-1. SQL bootstrap already applied (`docs/supabase-setup.sql`).
 2. Deploy `HAHA_app` web (`npm run deploy:web`) and collect production URL.
 3. Set `VITE_HAHA_APP_WEB_URL` in this project with that URL.
 4. Vercel env vars configured.

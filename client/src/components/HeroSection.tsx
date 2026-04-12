@@ -48,7 +48,7 @@ export function HeroSection({ language }: HeroSectionProps) {
                 className="w-full sm:w-auto"
                 data-testid="button-hero-cta-primary"
               >
-                <Link href="/signup">
+                <Link href="/app">
                   {t.ctaPrimary}
                   <ArrowRight className="w-4 h-4 ml-2" />
                 </Link>
@@ -57,15 +57,10 @@ export function HeroSection({ language }: HeroSectionProps) {
           </div>
 
           <div className="order-1 lg:order-2 relative flex justify-center">
-            <div className="relative w-[280px] sm:w-[320px] md:w-[360px] h-[560px] sm:h-[640px] md:h-[720px]">
+            <div className="relative w-[300px] sm:w-[340px] md:w-[380px] lg:w-[420px]">
               <div className="absolute -inset-4 bg-gradient-to-br from-orange-500/20 via-yellow-500/10 to-red-500/20 rounded-[3rem] blur-2xl" />
-              
-              <div className="relative w-full h-full bg-zinc-900 rounded-[2.5rem] border-4 border-zinc-800 shadow-2xl overflow-hidden">
-                <div className="absolute top-2 left-1/2 -translate-x-1/2 w-20 h-6 bg-black rounded-full z-10" />
-                
-                <div className="w-full h-full pt-4">
-                  <ChatSimulation language={language} />
-                </div>
+              <div className="relative w-full">
+                <ChatSimulation language={language} />
               </div>
             </div>
           </div>

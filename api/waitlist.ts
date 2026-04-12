@@ -1,9 +1,9 @@
 import type { VercelRequest, VercelResponse } from "@vercel/node";
-import { getSupabaseAdmin } from "./_supabase";
+import { addEntry, findEntryByEmail } from "./_waitlistStore";
 
 export default async function handler(
   req: VercelRequest,
-  res: VercelResponse
+  res: VercelResponse,
 ) {
   res.setHeader("Access-Control-Allow-Origin", "*");
   res.setHeader("Access-Control-Allow-Methods", "GET, POST, OPTIONS");
@@ -27,46 +27,19 @@ export default async function handler(
       }
 
       const normalizedEmail = email.toLowerCase().trim();
-      const supabaseAdmin = getSupabaseAdmin();
-
-      const { data: existing, error: existingError } = await supabaseAdmin
-        .from("waitlist_entries")
-        .select("id,email,created_at")
-        .eq("email", normalizedEmail)
-        .maybeSingle();
-
-      if (existingError) {
-        return res.status(500).json({ error: existingError.message });
-      }
+      const existing = findEntryByEmail(normalizedEmail);
 
       if (existing) {
         return res.status(200).json({
           message: "Already on waitlist",
-          entry: {
-            id: existing.id,
-            email: existing.email,
-            createdAt: existing.created_at,
-          },
+          entry: existing,
         });
       }
 
-      const { data: result, error: insertError } = await supabaseAdmin
-        .from("waitlist_entries")
-        .insert({ email: normalizedEmail })
-        .select("id,email,created_at")
-        .single();
-
-      if (insertError || !result) {
-        return res.status(500).json({ error: insertError?.message ?? "Failed to join waitlist" });
-      }
-
+      const entry = addEntry(normalizedEmail);
       return res.status(201).json({
         message: "Successfully added to waitlist",
-        entry: {
-          id: result.id,
-          email: result.email,
-          createdAt: result.created_at,
-        },
+        entry,
       });
     } catch (error) {
       console.error("Waitlist error:", error);

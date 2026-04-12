@@ -1,7 +1,15 @@
 import type { Express } from "express";
-import { createServer, type Server } from "http";
+import { type Server } from "http";
+import { randomUUID } from "crypto";
 import { insertWaitlistSchema } from "@shared/schema";
-import { supabaseAdmin } from "./supabaseAdmin";
+
+interface WaitlistEntry {
+  id: string;
+  email: string;
+  createdAt: string;
+}
+
+const waitlistEntries: WaitlistEntry[] = [];
 
 function requireAdmin(req: any, res: any, next: any) {
   if (req.session?.isAdmin) {
@@ -12,9 +20,8 @@ function requireAdmin(req: any, res: any, next: any) {
 
 export async function registerRoutes(
   httpServer: Server,
-  app: Express
+  app: Express,
 ): Promise<Server> {
-
   app.post("/api/admin/login", async (req, res) => {
     try {
       const { password } = req.body;
@@ -23,7 +30,7 @@ export async function registerRoutes(
       }
       req.session.isAdmin = true;
       return res.json({ success: true });
-    } catch (error) {
+    } catch (_error) {
       return res.status(500).json({ error: "Login failed" });
     }
   });
@@ -35,77 +42,39 @@ export async function registerRoutes(
   });
 
   app.get("/api/admin/waitlist", requireAdmin, async (_req, res) => {
-    try {
-      const { data, error } = await supabaseAdmin
-        .from("waitlist_entries")
-        .select("id,email,created_at")
-        .order("created_at", { ascending: false });
-
-      if (error) {
-        return res.status(500).json({ error: error.message });
-      }
-
-      const entries = (data ?? []).map((entry) => ({
-        id: entry.id,
-        email: entry.email,
-        createdAt: entry.created_at,
-      }));
-
-      return res.json({ entries });
-    } catch (error) {
-      return res.status(500).json({ error: "Failed to get waitlist" });
-    }
+    return res.json({ entries: [...waitlistEntries].reverse() });
   });
 
   app.post("/api/waitlist", async (req, res) => {
     try {
       const result = insertWaitlistSchema.safeParse(req.body);
-      
+
       if (!result.success) {
-        return res.status(400).json({ 
+        return res.status(400).json({
           error: "Invalid email address",
-          details: result.error.flatten() 
+          details: result.error.flatten(),
         });
       }
 
-      const { data: existingEntry, error: existingError } = await supabaseAdmin
-        .from("waitlist_entries")
-        .select("id,email,created_at")
-        .eq("email", result.data.email)
-        .maybeSingle();
-
-      if (existingError) {
-        return res.status(500).json({ error: existingError.message });
-      }
-
+      const existingEntry = waitlistEntries.find((entry) => entry.email === result.data.email);
       if (existingEntry) {
-        return res.status(200).json({ 
+        return res.status(200).json({
           message: "Already on waitlist",
-          entry: {
-            id: existingEntry.id,
-            email: existingEntry.email,
-            createdAt: existingEntry.created_at,
-          }
+          entry: existingEntry,
         });
       }
 
-      const { data: entry, error: insertError } = await supabaseAdmin
-        .from("waitlist_entries")
-        .insert({ email: result.data.email })
-        .select("id,email,created_at")
-        .single();
+      const entry: WaitlistEntry = {
+        id: randomUUID(),
+        email: result.data.email,
+        createdAt: new Date().toISOString(),
+      };
 
-      if (insertError || !entry) {
-        return res.status(500).json({ error: insertError?.message ?? "Failed to join waitlist" });
-      }
+      waitlistEntries.push(entry);
 
-      return res.status(201).json({ 
+      return res.status(201).json({
         message: "Successfully added to waitlist",
-        entry: {
-          id: entry.id,
-          email: entry.email,
-          createdAt: entry.created_at,
-        }
+        entry,
       });
     } catch (error) {
       console.error("Waitlist error:", error);
@@ -114,20 +83,7 @@ export async function registerRoutes(
   });
 
   app.get("/api/waitlist/count", async (_req, res) => {
-    try {
-      const { count, error } = await supabaseAdmin
-        .from("waitlist_entries")
-        .select("id", { count: "exact", head: true });
-
-      if (error) {
-        return res.status(500).json({ error: error.message });
-      }
-
-      return res.json({ count: count ?? 0 });
-    } catch (error) {
-      console.error("Waitlist count error:", error);
-      return res.status(500).json({ error: "Failed to get waitlist count" });
-    }
+    return res.json({ count: waitlistEntries.length });
   });
 
   return httpServer;

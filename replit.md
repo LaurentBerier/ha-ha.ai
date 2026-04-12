@@ -6,7 +6,6 @@ This repository now uses **Supabase** as the single backend for:
 
 - user authentication (email/password + Apple OAuth)
 - onboarding profile storage (`profiles`)
-- waitlist storage (`waitlist_entries`)
 
 Legacy Neon/Drizzle files were removed.
 
@@ -55,27 +54,20 @@ Admin:
 
 Run SQL bootstrap once in Supabase:
 
-- `docs/supabase-setup.sql`
 
 This creates:
 
 - `public.profiles` + signup trigger
-- `public.waitlist_entries`
 - RLS policies for profile and waitlist
 
 ## Environment Variables
 
 Client (Vite):
 
-- `VITE_SUPABASE_URL`
-- `VITE_SUPABASE_ANON_KEY`
 - `VITE_HAHA_APP_WEB_URL`
 
 Server / API:
 
-- `SUPABASE_URL`
-- `SUPABASE_ANON_KEY`
-- `SUPABASE_SERVICE_ROLE_KEY`
 - `SESSION_SECRET`
 - `ADMIN_PASSWORD`
 

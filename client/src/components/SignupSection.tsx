@@ -35,13 +35,13 @@ export function SignupSection({ language }: SignupSectionProps) {
 
         <div className="flex flex-col sm:flex-row items-center justify-center gap-3">
           <Button asChild size="lg" data-testid="button-signup-cta">
-            <Link href="/signup">
+            <Link href="/app">
               {t.button}
               <ArrowRight className="w-4 h-4 ml-2" />
             </Link>
           </Button>
           <Button asChild size="lg" variant="outline" data-testid="button-login-cta">
-            <Link href="/login">{t.secondaryButton}</Link>
+            <Link href="/app">{t.secondaryButton}</Link>
           </Button>
         </div>
       </div>
