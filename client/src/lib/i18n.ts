@@ -160,6 +160,7 @@ export const copy = {
     footer: {
       copyright: '© 2026 Ha-Ha.ai. Tous droits réservés.',
       contact: 'Contact',
+      privacyPolicy: 'Politique de confidentialité',
       moreComingSoon: 'D\'autres humoristes s\'en viennent.',
     },
   },
@@ -311,6 +312,7 @@ export const copy = {
     footer: {
       copyright: '© 2026 Ha-Ha.ai. All rights reserved.',
       contact: 'Contact',
+      privacyPolicy: 'Privacy policy',
       moreComingSoon: 'More comedians coming soon.',
     },
   },

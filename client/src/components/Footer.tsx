@@ -1,4 +1,5 @@
 import { type Language, copy } from '@/lib/i18n';
+import { Link } from 'wouter';
 
 interface FooterProps {
   language: Language;
@@ -6,6 +7,7 @@ interface FooterProps {
 
 export function Footer({ language }: FooterProps) {
   const t = copy[language].footer;
+  const privacyHref = language === 'en' ? '/privacy-policy' : '/politique-confidentialite';
 
   return (
     <footer className="py-12 border-t border-border">
@@ -29,12 +31,19 @@ export function Footer({ language }: FooterProps) {
 
           <div className="flex items-center gap-4">
             <a
-              href="mailto:info@breakingwalls.co"
+              href="mailto:info@ha-ha.ai"
               className="text-sm text-muted-foreground hover:text-foreground transition-colors"
               data-testid="link-contact"
             >
               {t.contact}
             </a>
+            <Link
+              href={privacyHref}
+              className="text-sm text-muted-foreground hover:text-foreground transition-colors"
+              data-testid="link-privacy-policy"
+            >
+              {t.privacyPolicy}
+            </Link>
           </div>
         </div>
       </div>

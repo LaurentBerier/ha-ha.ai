@@ -6,6 +6,8 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import LandingPage from "@/pages/LandingPage";
 import AdminPage from "@/pages/AdminPage";
 import AppBridgePage from "@/pages/AppBridgePage";
+import PrivacyPolicyPage from "@/pages/PrivacyPolicyPage";
+import PrivacyPolicyPageEn from "@/pages/PrivacyPolicyPageEn";
 import NotFound from "@/pages/not-found";
 
 function Router() {
@@ -24,6 +26,8 @@ function Router() {
       <Route path="/auth/callback" component={AppBridgePage} />
       <Route path="/onboarding" component={AppBridgePage} />
       <Route path="/admin" component={AdminPage} />
+      <Route path="/politique-confidentialite" component={PrivacyPolicyPage} />
+      <Route path="/privacy-policy" component={PrivacyPolicyPageEn} />
       <Route component={NotFound} />
     </Switch>
   );
