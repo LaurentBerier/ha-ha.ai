@@ -55,6 +55,7 @@ Client:
 
 - `VITE_PUBLIC_SITE_URL` (recommended; set canonical origin, e.g. `https://www.ha-ha.ai`)
 - `VITE_HAHA_APP_WEB_URL` (required; deployed URL of the web build from `HAHA_app`)
+- `VITE_GA_MEASUREMENT_ID` (optional; GA4 measurement ID like `G-XXXXXXXXXX`)
 
 Server/API:
 
@@ -106,6 +107,7 @@ Ensure all env vars are set in Vercel project settings.
 Important:
 
 - `VITE_*` vars are required at build time for frontend auth pages.
+- If using Google Analytics, set `VITE_GA_MEASUREMENT_ID` in Vercel so GA4 is injected in production.
 
 ## Manual Verification Checklist
 

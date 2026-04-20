@@ -1,14 +1,16 @@
-import { Switch, Route } from "wouter";
+import { Route, Switch, useLocation } from "wouter";
 import { queryClient } from "./lib/queryClient";
 import { QueryClientProvider } from "@tanstack/react-query";
 import { Toaster } from "@/components/ui/toaster";
 import { TooltipProvider } from "@/components/ui/tooltip";
+import { useEffect } from "react";
 import LandingPage from "@/pages/LandingPage";
 import AdminPage from "@/pages/AdminPage";
 import AppBridgePage from "@/pages/AppBridgePage";
 import PrivacyPolicyPage from "@/pages/PrivacyPolicyPage";
 import PrivacyPolicyPageEn from "@/pages/PrivacyPolicyPageEn";
 import NotFound from "@/pages/not-found";
+import { trackPageView } from "@/lib/analytics";
 
 function Router() {
   return (
@@ -33,11 +35,23 @@ function Router() {
   );
 }
 
+function AnalyticsTracker() {
+  const [location] = useLocation();
+
+  useEffect(() => {
+    const pagePath = `${location}${window.location.search}`;
+    trackPageView(pagePath);
+  }, [location]);
+
+  return null;
+}
+
 function App() {
   return (
     <QueryClientProvider client={queryClient}>
       <TooltipProvider>
         <Toaster />
+        <AnalyticsTracker />
         <Router />
       </TooltipProvider>
     </QueryClientProvider>
