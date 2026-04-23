@@ -1,7 +1,7 @@
-import { useState } from 'react';
 import { type Language, copy } from '@/lib/i18n';
 import { Button } from '@/components/ui/button';
-import { ArrowRight, CheckCircle, Loader2 } from 'lucide-react';
+import { ArrowRight } from 'lucide-react';
+import { Link } from 'wouter';
 import stageImage from '@assets/image_1769047346055.png';
 
 interface SignupSectionProps {
@@ -10,41 +10,10 @@ interface SignupSectionProps {
 
 export function SignupSection({ language }: SignupSectionProps) {
   const t = copy[language].cta;
-  const [email, setEmail] = useState('');
-  const [status, setStatus] = useState<'idle' | 'loading' | 'success' | 'already' | 'error'>('idle');
-
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!email.trim()) return;
-
-    setStatus('loading');
-    try {
-      const res = await fetch('/api/waitlist', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email: email.trim() }),
-      });
-
-      const data = await res.json();
-
-      if (res.status === 201) {
-        setStatus('success');
-        setEmail('');
-      } else if (res.status === 200 && data.message === 'Already on waitlist') {
-        setStatus('already');
-      } else {
-        setStatus('error');
-      }
-    } catch {
-      setStatus('error');
-    }
-  };
-
-  const isSubmitted = status === 'success' || status === 'already';
 
   return (
-    <section id="signup" className="py-12 sm:py-16 relative overflow-hidden">
-      <div 
+    <section id="signup" className="py-16 sm:py-24 relative overflow-hidden">
+      <div
         className="absolute inset-0 opacity-20"
         style={{
           backgroundImage: `url(${stageImage})`,
@@ -54,60 +23,28 @@ export function SignupSection({ language }: SignupSectionProps) {
       />
       <div className="absolute inset-0 bg-gradient-to-t from-background via-background/90 to-background" />
 
+      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[28rem] h-[28rem] bg-primary/10 rounded-full blur-3xl pointer-events-none" />
+
       <div className="max-w-2xl mx-auto px-4 sm:px-6 lg:px-8 relative">
-        <div className="text-center mb-10">
-          <h2 className="text-3xl sm:text-4xl font-bold mb-4">
+        <div className="bg-card/30 backdrop-blur-sm border border-border/50 rounded-2xl p-8 sm:p-12 text-center">
+          <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold mb-4" data-testid="text-cta-title">
             {t.title}
           </h2>
-          <p className="text-lg text-muted-foreground">
+          <p className="text-lg text-muted-foreground mb-8" data-testid="text-cta-description">
             {t.description}
           </p>
+          <Button
+            asChild
+            size="lg"
+            className="w-full sm:w-auto text-base px-8"
+            data-testid="button-cta-try-now"
+          >
+            <Link href="/app">
+              {t.button}
+              <ArrowRight className="w-4 h-4 ml-2" />
+            </Link>
+          </Button>
         </div>
-
-        {isSubmitted ? (
-          <div className="flex flex-col items-center gap-3 text-center" data-testid="waitlist-confirmation">
-            <CheckCircle className="w-10 h-10 text-green-500" />
-            <p className="text-lg font-medium">
-              {status === 'already' ? t.already : t.success}
-            </p>
-          </div>
-        ) : (
-          <form onSubmit={handleSubmit} className="flex flex-col sm:flex-row items-center justify-center gap-3">
-            <input
-              type="email"
-              required
-              value={email}
-              onChange={(e) => {
-                setEmail(e.target.value);
-                if (status === 'error') setStatus('idle');
-              }}
-              placeholder={t.placeholder}
-              className="w-full sm:w-80 px-4 py-3 rounded-lg bg-card border border-border text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary"
-              data-testid="input-waitlist-email"
-            />
-            <Button
-              type="submit"
-              size="lg"
-              disabled={status === 'loading'}
-              data-testid="button-waitlist-submit"
-            >
-              {status === 'loading' ? (
-                <Loader2 className="w-4 h-4 animate-spin" />
-              ) : (
-                <>
-                  {t.button}
-                  <ArrowRight className="w-4 h-4 ml-2" />
-                </>
-              )}
-            </Button>
-          </form>
-        )}
-
-        {status === 'error' && (
-          <p className="text-center text-red-500 mt-3" data-testid="text-waitlist-error">
-            {t.error}
-          </p>
-        )}
       </div>
     </section>
   );
