@@ -310,3 +310,25 @@
 .animate-orb-talk {
   animation: orb-talk 1.8s ease-in-out infinite;
 }
+
+@keyframes haha-light-drift {
+  0% {
+    background-position: 20% 30%, 80% 70%;
+  }
+  50% {
+    background-position: 35% 45%, 65% 55%;
+  }
+  100% {
+    background-position: 20% 30%, 80% 70%;
+  }
+}
+
+.bg-haha-light {
+  background-image:
+    radial-gradient(circle at 20% 30%, rgba(220, 38, 38, 0.18), transparent 45%),
+    radial-gradient(circle at 80% 70%, rgba(59, 130, 246, 0.16), transparent 45%);
+  background-repeat: no-repeat;
+  background-size: 60% 60%, 60% 60%;
+  mix-blend-mode: screen;
+  animation: haha-light-drift 18s ease-in-out infinite;
+}
